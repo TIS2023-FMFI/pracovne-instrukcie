@@ -2,8 +2,9 @@
 
 /* General styles for the application window */
 QWidget {
-    background-color: #0096ff;
+    background-color: #0c9aff;
     font-family: Arial, sans-serif;
+    font-weight: bold;
 }
 
 /* Styles for buttons */
@@ -12,9 +13,10 @@ QToolButton,
 QRadioButton {
     padding: 8px 16px;
     border: none;
-    border-radius: 5px;
+    border-radius: 10px;
     color: #fff;
     background-color: #4CAF50;
+    font-weight: bold;
 }
 
 /* Hover effect for buttons */
@@ -74,14 +76,15 @@ QScrollBar::sub-page:vertical {
 /* Styles for QLineEdit (input field) */
 QLineEdit {
     padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    border: 1px solid #000;
+    border-radius: 10px;
+    background-color: #75c5ff;
 }
 
 /* Styles for QLabel (labels) */
 QLabel {
     color: #333;
-    font-size: 30px;
+    font-size: 36px;
 }
 
 /* Styles for QMessageBox (pop-up message box) */
