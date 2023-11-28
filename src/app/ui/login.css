@@ -1,0 +1,103 @@
+/* Advanced QSS for PyQt5 Project */
+
+/* General styles for the application window */
+QWidget {
+    background-color: #0096ff;
+    font-family: Arial, sans-serif;
+}
+
+/* Styles for buttons */
+QPushButton,
+QToolButton,
+QRadioButton {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    background-color: #4CAF50;
+}
+
+/* Hover effect for buttons */
+QPushButton:hover,
+QToolButton:hover,
+QRadioButton:hover {
+    background-color: #45a049;
+}
+
+/* Pressed effect for buttons */
+QPushButton:pressed,
+QToolButton:pressed,
+QRadioButton:pressed {
+    background-color: #39803b;
+}
+
+/* Styles for checkboxes and radio buttons */
+QCheckBox,
+QRadioButton {
+    spacing: 5px;
+}
+
+/* Styles for sliders */
+QSlider::groove:horizontal {
+    height: 8px;
+    background: #dcdcdc;
+}
+
+QSlider::handle:horizontal {
+    width: 16px;
+    margin: -8px 0;
+    background: #3498db;
+    border: 1px solid #2980b9;
+    border-radius: 8px;
+}
+
+/* Custom-styled scrollbar */
+QScrollBar:vertical {
+    width: 10px;
+    border: 1px solid #ccc;
+    background: #f0f0f0;
+}
+
+QScrollBar::handle:vertical {
+    background: #3498db;
+    border: 1px solid #2980b9;
+    border-radius: 5px;
+}
+
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical,
+QScrollBar::add-page:vertical,
+QScrollBar::sub-page:vertical {
+    background: #f0f0f0;
+}
+
+/* Styles for QLineEdit (input field) */
+QLineEdit {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Styles for QLabel (labels) */
+QLabel {
+    color: #333;
+}
+
+/* Styles for QMessageBox (pop-up message box) */
+QMessageBox {
+    background-color: #fff;
+}
+
+/* Styles for QMessageBox buttons */
+QMessageBox QPushButton {
+    padding: 8px 16px;
+    margin: 5px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+}
+
+QMessageBox QPushButton:hover {
+    background-color: #2980b9;
+}
