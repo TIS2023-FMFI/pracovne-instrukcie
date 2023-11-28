@@ -81,6 +81,7 @@ QLineEdit {
 /* Styles for QLabel (labels) */
 QLabel {
     color: #333;
+    font-size: 30px;
 }
 
 /* Styles for QMessageBox (pop-up message box) */
