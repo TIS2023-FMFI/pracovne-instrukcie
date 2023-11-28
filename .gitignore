@@ -1,4 +1,5 @@
 **/.idea/
 **/__pycache__/
 resources/pdf/*
+!resources/pdf/README.md
 resources/employees.csv
