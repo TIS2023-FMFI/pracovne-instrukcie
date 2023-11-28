@@ -1,14 +1,40 @@
 import sys
-from PyQt5.QtWidgets import QApplication
-from interface.pyqt.main_window import MainWindow
+
+from PyQt5.uic import loadUi
+from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QDialog, QApplication, QWidget, QMainWindow, QVBoxLayout, QLabel
 
 
-def main():
+class LoginWindow(QDialog):
+    def __init__(self) -> None:
+        super(LoginWindow, self).__init__()
+        loadUi('ui/login.ui', self)
+        self.main_window = MainWindow(self)
+
+        self.login_button.clicked.connect(self.log_in)
+        self.showFullScreen()
+
+    def log_in(self) -> None:
+        # TODO: login logistics
+        self.main_window.showFullScreen()
+        self.hide()
+
+
+class MainWindow(QMainWindow):
+    def __init__(self, login_window) -> None:
+        self.login_window: QDialog = login_window
+        super(MainWindow, self).__init__()
+        loadUi('ui/main_window.ui', self)
+
+        self.logout_button.clicked.connect(self.log_out)
+
+    def log_out(self) -> None:
+        self.hide()
+        self.login_window.showFullScreen()
+
+
+if __name__ == '__main__':
     app = QApplication(sys.argv)
-    window = MainWindow()  # Initialize your main window
-    window.show()
-    sys.exit(app.exec_())
-
-
-if __name__ == "__main__":
-    main()
+    w = LoginWindow()
+    w.show()
+    app.exec()
