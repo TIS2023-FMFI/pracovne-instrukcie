@@ -1,5 +1,5 @@
 import sys
-
+import os
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QDialog, QApplication, QWidget, QMainWindow, QVBoxLayout, QLabel
@@ -28,9 +28,18 @@ class MainWindow(QMainWindow):
 
         self.logout_button.clicked.connect(self.log_out)
 
+        self.instructions = [ "../../resources/pdf" + instruction for instruction in os.listdir( "../../resources/pdf" ) if instruction.endswith( ".pdf" ) ]
+        print( self.instructions )
+        self.display_instructions()
+        
+
+
     def log_out(self) -> None:
         self.hide()
         self.login_window.showFullScreen()
+
+    def display_instructions( self ) -> None:
+        pass
 
 
 if __name__ == '__main__':
