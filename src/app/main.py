@@ -28,7 +28,7 @@ class MainWindow(QMainWindow):
 
         self.logout_button.clicked.connect(self.log_out)
 
-        self.instructions = [ "../../resources/pdf" + instruction for instruction in os.listdir( "../../resources/pdf" ) if instruction.endswith( ".pdf" ) ]
+        self.instructions = [ "../../resources/pdf/" + instruction for instruction in os.listdir( "../../resources/pdf" ) if instruction.endswith( ".pdf" ) ]
         print( self.instructions )
         self.display_instructions()
         
