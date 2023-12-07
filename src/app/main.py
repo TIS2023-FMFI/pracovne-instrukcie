@@ -35,9 +35,9 @@ class MainWindow(QMainWindow):
 
         self.logout_button.clicked.connect(self.log_out)
         self.model: QStandardItemModel = QStandardItemModel()
-        self.dir_path = "../../resources/pdf/"
-        self.instructions = [ self.dir_path + instruction for instruction in os.listdir( self.dir_path ) if instruction.endswith( ".pdf" ) ]
-        self.pdf_viewer = pdf = PDFViewer( self )
+        self.instructions_dir: str = "../../resources/pdf/"
+        self.instructions: list[ str ] = [ self.instructions_dir + instruction for instruction in os.listdir( self.instructions_dir ) if instruction.endswith( ".pdf" ) ]
+        self.pdf_viewer: PDFViewer = PDFViewer( self )
         self.display_instructions()
         
 
@@ -51,7 +51,7 @@ class MainWindow(QMainWindow):
         self.listView.setModel( self.model )
         self.listView.setMovement( QListView.Movement.Free )
         
-        instruction_names: str = [ instruction for instruction in os.listdir( self.dir_path ) if instruction.endswith( ".pdf" ) ]
+        instruction_names: str = [ instruction for instruction in os.listdir( self.instructions_dir ) if instruction.endswith( ".pdf" ) ]
         self.listView.clicked[ QModelIndex ].connect( self.clicked )
         for instruction in instruction_names:
             element: QStandardItem = QStandardItem( instruction.removesuffix( ".pdf" ) )
@@ -61,11 +61,11 @@ class MainWindow(QMainWindow):
             self.model.appendRow( element )
         
     def clicked( self, index ) -> None:
-        item = self.model.itemFromIndex( index )
+        item: QStandardItem = self.model.itemFromIndex( index )
         self.open_instruction( item.text() )
 
-    def open_instruction( self, name ):
-        self.pdf_viewer.set_path( self.dir_path + name + '.pdf' )
+    def open_instruction( self, name ) -> None:
+        self.pdf_viewer.set_path( self.instructions_dir + name + '.pdf' )
         self.pdf_viewer.display()
         
 
@@ -76,20 +76,20 @@ class PDFViewer( QMainWindow ):
         super().__init__( parent )
 
         self.setWindowTitle('PDF Viewer')
-        self.w, self.h = self.get_screen_resolution()
+        self.w, self.h: int  = self.get_screen_resolution()
         self.setGeometry( self.w // 2 - 500 , 100, 1000 , self.h - 200 )
-        self.path = pdf_path
+        self.path: str = pdf_path
     
-    def set_path( self, path ):
+    def set_path( self, path ) -> None:
         self.path = path
     
-    def get_screen_resolution( self ):
+    def get_screen_resolution( self ) -> tuple[ int ]:
         user32 = ctypes.windll.user32
         screen_width = user32.GetSystemMetrics(0)
         screen_height = user32.GetSystemMetrics(1)
         return screen_width, screen_height
 
-    def display( self ):
+    def display( self ) -> None:
         # Load the PDF document
         self.pdf_document = fitz.open( self.path )
         self.current_page = 0
