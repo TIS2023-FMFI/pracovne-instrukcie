@@ -76,7 +76,7 @@ class PDFViewer( QMainWindow ):
         super().__init__( parent )
 
         self.setWindowTitle('PDF Viewer')
-        self.w, self.h: int  = self.get_screen_resolution()
+        self.w, self.h = self.get_screen_resolution()
         self.setGeometry( self.w // 2 - 500 , 100, 1000 , self.h - 200 )
         self.path: str = pdf_path
     
