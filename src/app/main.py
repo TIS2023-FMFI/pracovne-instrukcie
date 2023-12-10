@@ -64,74 +64,78 @@ class MainWindow(QMainWindow):
         item: QStandardItem = self.model.itemFromIndex( index )
         self.open_instruction( item.text() )
 
-    def open_instruction( self, name ) -> None:
-        self.pdf_viewer.set_path( self.instructions_dir + name + '.pdf' )
+    def open_instruction( self, file_name ) -> None:
+        #get display name from file name dict
+        name: str = file_name
+        self.pdf_viewer.set_document( self.instructions_dir + file_name + '.pdf', name )
         self.pdf_viewer.display()
         
 
         
         
 class PDFViewer( QMainWindow ):
-    def __init__(self, parent, pdf_path = None ) -> None:
+    def __init__(self, parent, pdf_path = None, name = None ) -> None:
         super().__init__( parent )
-
-        self.setWindowTitle('PDF Viewer')
-        self.w, self.h = self.get_screen_resolution()
-        self.setGeometry( self.w // 2 - 500 , 100, 1000 , self.h - 200 )
+        self.screen_width, self.screen_height = self.get_screen_resolution()
+        self.w: int = 1000
+        self.h: int = self.screen_height - 100
         self.path: str = pdf_path
-    
-    def set_path( self, path ) -> None:
+        self.name: str = name
+        self.pdf_document = fitz.open( self.path )
+        self.setGeometry( ( self.screen_width - self.w ) // 2, 50, self.w , self.h )
+        
+    def set_document( self, path: str, name: str ) -> None:
         self.path = path
-    
+        self.name = name
+        self.pdf_document = fitz.open( self.path )
+        self.setWindowTitle( self.name )
+
     def get_screen_resolution( self ) -> tuple[ int ]:
         user32 = ctypes.windll.user32
-        screen_width = user32.GetSystemMetrics(0)
-        screen_height = user32.GetSystemMetrics(1)
+        screen_width = user32.GetSystemMetrics( 0 )
+        screen_height = user32.GetSystemMetrics( 1 )
         return screen_width, screen_height
 
+    def resize_page( self, page: fitz.Page ) -> fitz.Pixmap:
+        w, h = page.rect.br
+        zoom = self.w / w * 0.96
+        matrix = fitz.Matrix( zoom, zoom )
+        return page.get_pixmap( matrix = matrix )
+
     def display( self ) -> None:
-        # Load the PDF document
-        self.pdf_document = fitz.open( self.path )
-        self.current_page = 0
-
         # Create QGraphicsView for displaying PDF pages
-        self.graphics_view = QGraphicsView(self)
-        self.graphics_view.setAlignment(Qt.AlignTop | Qt.AlignLeft)
-
+        graphics_view = QGraphicsView( self )
+        graphics_view.setAlignment( Qt.AlignTop | Qt.AlignCenter )
         # Create QGraphicsScene with a vertical layout
-        self.scene = QGraphicsScene(self)
-        
-        self.graphics_view.setScene(self.scene)
-
+        scene = QGraphicsScene( self )
+        graphics_view.setScene( scene )
         # Layout setup
         layout = QVBoxLayout()
-        layout.addWidget(self.graphics_view)
-
+        layout.addWidget(graphics_view)
         # Display all pages with lines between them
         y_position = 0
-        for page_number in range(self.pdf_document.page_count):
-            pdf_page = self.pdf_document[ page_number ]
-            
-            image = pdf_page.get_pixmap()
+        for page_number in range( self.pdf_document.page_count ):
             pixmap = QPixmap()
-            pixmap.loadFromData(image.tobytes())
-            pixmap_item = QGraphicsPixmapItem(pixmap)
-            self.scene.addItem(pixmap_item)
-            pixmap_item.setPos(0, y_position)
+            pdf_page = self.pdf_document[ page_number ]
+            image = self.resize_page( pdf_page )
+
+            pixmap.loadFromData( image.tobytes() )
+            pixmap_item = QGraphicsPixmapItem( pixmap )
+            scene.addItem( pixmap_item )
+            pixmap_item.setPos( 0, y_position )
             y_position += pixmap_item.pixmap().height()
             # Draw a line between pages
             if page_number < self.pdf_document.page_count - 1:
-                line = QGraphicsLineItem(0, y_position, pixmap.width(), y_position)
-                self.scene.addItem(line)
-
+                line = QGraphicsLineItem( 0, y_position, pixmap.width(), y_position )
+                scene.addItem( line )
                 y_position += 1  # height of line
 
         # Create central widget
         container = QDialog()
-        container.setLayout(layout)
-        self.setCentralWidget(container)
+        container.setLayout( layout )
+        self.setCentralWidget( container )
         self.show()
-        
+    
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
