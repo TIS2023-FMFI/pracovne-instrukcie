@@ -1,12 +1,15 @@
 import sys
 import os
+import typing
+from PyQt5 import QtCore, QtGui
 import fitz
 import ctypes
 from PyQt5.uic import loadUi
-from PyQt5.QtWidgets import QDialog, QApplication, QWidget, QMainWindow, QVBoxLayout, QLabel, QListView, \
-QGraphicsView, QGraphicsScene, QGraphicsPixmapItem, QVBoxLayout, QGraphicsLineItem
-from PyQt5.QtGui import QStandardItemModel, QStandardItem, QPixmap, QPainter, QPen
-from PyQt5.QtCore import QModelIndex, QAbstractListModel, QSize, Qt, QUrl
+from PyQt5.QtWidgets import QDialog, QApplication, QStyleOptionViewItem, QWidget, QMainWindow, QVBoxLayout, QLabel, \
+QGraphicsView, QGraphicsScene, QGraphicsPixmapItem, QVBoxLayout, QGraphicsLineItem, QItemDelegate, QStyle,QAbstractItemView
+
+from PyQt5.QtGui import QPixmap, QPainter, QPen, QBrush, QColor, QFont
+from PyQt5.QtCore import QModelIndex, QAbstractListModel, QObject, QSize, Qt
 
 
 
@@ -27,52 +30,88 @@ class LoginWindow(QDialog):
         self.hide()
 
 
-class MainWindow(QMainWindow):
+class MainWindow( QMainWindow ):
     def __init__(self, login_window) -> None:
         self.login_window: QDialog = login_window
-        super(MainWindow, self).__init__()
+        super( MainWindow, self ).__init__()
         loadUi('ui/main_window.ui', self)
+        self.logout_button.clicked.connect( self.log_out )
 
-        self.logout_button.clicked.connect(self.log_out)
-        self.model: QStandardItemModel = QStandardItemModel()
         self.instructions_dir: str = "../../resources/pdf/"
         self.instructions: list[ str ] = [ self.instructions_dir + instruction for instruction in os.listdir( self.instructions_dir ) if instruction.endswith( ".pdf" ) ]
+        self.instruction_names: str = [ instruction.removesuffix( ".pdf" )  for instruction in os.listdir( self.instructions_dir ) if instruction.endswith( ".pdf" ) ]
+       
         self.pdf_viewer: PDFViewer = PDFViewer( self )
+        self.list_model = ListModel( self.instruction_names )
+        self.delegate = ItemDelagte( self )
         self.display_instructions()
         
+        
 
+    def display_instructions( self ):
+        self.listView.setModel( self.list_model )
+        self.listView.setSelectionMode( QAbstractItemView.ExtendedSelection )
+        self.listView.clicked[ QModelIndex ].connect( self.clicked )
+        self.listView.setItemDelegate( self.delegate )
 
     def log_out(self) -> None:
         self.hide()
         self.login_window.showFullScreen()
-
-    def display_instructions( self ) -> None:
-        
-        self.listView.setModel( self.model )
-        self.listView.setMovement( QListView.Movement.Free )
-        
-        instruction_names: str = [ instruction for instruction in os.listdir( self.instructions_dir ) if instruction.endswith( ".pdf" ) ]
-        self.listView.clicked[ QModelIndex ].connect( self.clicked )
-        for instruction in instruction_names:
-            element: QStandardItem = QStandardItem( instruction.removesuffix( ".pdf" ) )
-            element.setEditable( False )
-            element.setDragEnabled( False )
-            element.setDropEnabled( False )
-            self.model.appendRow( element )
         
     def clicked( self, index ) -> None:
-        item: QStandardItem = self.model.itemFromIndex( index )
-        self.open_instruction( item.text() )
+        item: str = self.list_model.get( index )
+        self.open_instruction( item )
 
     def open_instruction( self, file_name ) -> None:
         #get display name from file name dict
         name: str = file_name
         self.pdf_viewer.set_document( self.instructions_dir + file_name + '.pdf', name )
         self.pdf_viewer.display()
-        
+    
+class ItemDelagte( QItemDelegate ):
+    def __init__( self, parent = None ) -> None:
+        QItemDelegate.__init__( self, parent )
 
+    def paint( self, painter, option, index ) -> None:
+        painter.save()
+        painter.setFont( QFont( "Arial" ) )
+        painter.setPen( QPen( Qt.black ) )
+
+        if option.state & QStyle.State_Selected:
+            painter.setBrush( QBrush( Qt.white ) )
+        else:
+            painter.setBrush( QBrush( QColor( '#0c9aff' ) ) )
+
+        painter.drawRect( option.rect )
+        painter.setPen( QPen( Qt.black ) )
+        value: str = index.data( Qt.DisplayRole )
+        painter.drawText( option.rect, Qt.AlignLeft, value )
+
+        painter.restore()
         
-        
+class ListModel( QAbstractListModel ):
+    def __init__( self, data, parent: QObject = None ) -> None:
+        super().__init__( parent )
+        self.list_data = data
+
+    def rowCount( self, parent = QModelIndex() ) -> int:
+        return len( self.list_data )
+    
+    def data( self, index: QModelIndex, role: int = None ) -> any:
+        row = index.row()
+        if not index.isValid() or row >= len( self.list_data ):
+            return None
+        if role != Qt.DisplayRole:
+            return None
+        return self.list_data[ row ]
+   
+    def get( self, index: QModelIndex ) -> any:
+        row: int = index.row()
+        if not index.isValid() or row >= len( self.list_data ):
+            return None
+        return self.list_data[ row ]
+    
+    
 class PDFViewer( QMainWindow ):
     def __init__(self, parent, pdf_path = None, name = None ) -> None:
         super().__init__( parent )
@@ -111,7 +150,7 @@ class PDFViewer( QMainWindow ):
         graphics_view.setScene( scene )
         # Layout setup
         layout = QVBoxLayout()
-        layout.addWidget(graphics_view)
+        layout.addWidget( graphics_view )
         # Display all pages with lines between them
         y_position = 0
         for page_number in range( self.pdf_document.page_count ):
