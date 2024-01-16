@@ -2,7 +2,12 @@ import sys
 
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QDialog, QApplication, QWidget, QMainWindow, QVBoxLayout, QLabel
+from PyQt5.QtWidgets import QDialog, QApplication, QWidget, QMainWindow, QVBoxLayout, QLabel, QLineEdit
+
+import employees
+
+first_name_of_employee = ""
+last_name_of_employee = ""
 
 
 class LoginWindow(QDialog):
@@ -14,10 +19,16 @@ class LoginWindow(QDialog):
         self.login_button.clicked.connect(self.log_in)
         self.showFullScreen()
 
+
     def log_in(self) -> None:
-        # TODO: login logistics
-        self.main_window.showFullScreen()
-        self.hide()
+        code = str(self.login_input.text())
+        log_data = employees.valid_code(code)
+
+        if log_data != False:
+            first_name_of_employee = log_data[1]
+            last_name_of_employee = log_data[2]
+            self.main_window.showFullScreen()
+            self.hide()
 
 
 class MainWindow(QMainWindow):
@@ -29,6 +40,8 @@ class MainWindow(QMainWindow):
         self.logout_button.clicked.connect(self.log_out)
 
     def log_out(self) -> None:
+        first_name_of_employee = ""
+        last_name_of_employee = ""
         self.hide()
         self.login_window.showFullScreen()
 
