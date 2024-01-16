@@ -8,7 +8,7 @@ def get_employee_first_name(code: str) -> str:
 def get_employee_last_name(code: str) -> str:
     return employees.get(code, {}).get('last_name')
 
-def valid_code(code: str) -> bool:
+def valid_code(code: str):
     read_file()
     if code in employees:
         first_name = get_employee_first_name(code)
