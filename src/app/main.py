@@ -1,19 +1,9 @@
 import sys
 import os
-import typing
-from PyQt5 import QtCore, QtGui
-import fitz
-import ctypes
 from PyQt5.uic import loadUi
-from PyQt5.QtWidgets import QDialog, QApplication, QStyleOptionViewItem, QWidget, QMainWindow, QVBoxLayout, QLabel, \
-QGraphicsView, QGraphicsScene, QGraphicsPixmapItem, QVBoxLayout, QGraphicsLineItem, QStyle,QAbstractItemView, QStyledItemDelegate,QListWidgetItem
-
-from PyQt5.QtGui import QPixmap, QPainter, QPen, QBrush, QColor, QFont
-from PyQt5.QtCore import QModelIndex, QAbstractListModel, QObject, QSize, Qt, QRect
-
-
-
-
+from PyQt5.QtWidgets import QDialog, QApplication, QMainWindow, QListWidgetItem
+from PyQt5.QtCore import Qt
+from pdf_viewer import PDFViewer
 
 class LoginWindow(QDialog):
     def __init__(self) -> None:
@@ -53,6 +43,7 @@ class MainWindow( QMainWindow ):
 
     def log_out( self ) -> None:
         self.hide()
+        self.pdf_viewer.hide()
         self.login_window.showFullScreen()
         
     def clicked( self, item ) -> None:
@@ -64,73 +55,9 @@ class MainWindow( QMainWindow ):
         self.pdf_viewer.set_document( self.instructions_dir + file_name + '.pdf', name )
         self.pdf_viewer.display()
     
-    
 
 
 
-class PDFViewer( QMainWindow ):
-    def __init__(self, parent, pdf_path = None, name = None ) -> None:
-        super().__init__( parent )
-        self.screen_width, self.screen_height = self.get_screen_resolution()
-        self.w: int = 1000
-        self.h: int = self.screen_height - 100
-        self.path: str = pdf_path
-        self.name: str = name
-        self.pdf_document = fitz.open( self.path )
-        self.setGeometry( ( self.screen_width - self.w ) // 2, 50, self.w , self.h )
-        
-    def set_document( self, path: str, name: str ) -> None:
-        self.path = path
-        self.name = name
-        self.pdf_document = fitz.open( self.path )
-        self.setWindowTitle( self.name )
-
-    def get_screen_resolution( self ) -> tuple[ int ]:
-        user32 = ctypes.windll.user32
-        screen_width = user32.GetSystemMetrics( 0 )
-        screen_height = user32.GetSystemMetrics( 1 )
-        return screen_width, screen_height
-
-    def resize_page( self, page: fitz.Page ) -> fitz.Pixmap:
-        w, h = page.rect.br
-        zoom = self.w / w * 0.96
-        matrix = fitz.Matrix( zoom, zoom )
-        return page.get_pixmap( matrix = matrix )
-
-    def display( self ) -> None:
-        # Create QGraphicsView for displaying PDF pages
-        graphics_view = QGraphicsView( self )
-        graphics_view.setAlignment( Qt.AlignTop | Qt.AlignCenter )
-        # Create QGraphicsScene with a vertical layout
-        scene = QGraphicsScene( self )
-        graphics_view.setScene( scene )
-        # Layout setup
-        layout = QVBoxLayout()
-        layout.addWidget( graphics_view )
-        # Display all pages with lines between them
-        y_position = 0
-        for page_number in range( self.pdf_document.page_count ):
-            pixmap = QPixmap()
-            pdf_page = self.pdf_document[ page_number ]
-            image = self.resize_page( pdf_page )
-
-            pixmap.loadFromData( image.tobytes() )
-            pixmap_item = QGraphicsPixmapItem( pixmap )
-            scene.addItem( pixmap_item )
-            pixmap_item.setPos( 0, y_position )
-            y_position += pixmap_item.pixmap().height()
-            # Draw a line between pages
-            if page_number < self.pdf_document.page_count - 1:
-                line = QGraphicsLineItem( 0, y_position, pixmap.width(), y_position )
-                scene.addItem( line )
-                y_position += 1  # height of line
-
-        # Create central widget
-        container = QDialog()
-        container.setLayout( layout )
-        self.setCentralWidget( container )
-        self.show()
-    
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
