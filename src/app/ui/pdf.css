@@ -1,23 +1,24 @@
-QPushButton{
+QPushButton {
     background-color: transparent;
     padding: 10px 20px;
 }
-QLabel{
+
+QLabel {
     font-size: 20px;
 }
-QWidget{
+
+QWidget {
     background-color: #75c5ff;
 }
-QScrollBar:vertical {
 
+QScrollBar:vertical {
     background: #75c5ff;
     border: none;
     width: 15px;
-
 }
 
 
-QGraphicsView{
+QGraphicsView {
     margin: 0;
     padding: 0;
     border: none;
