@@ -6,9 +6,6 @@ from PyQt5.QtWidgets import QDialog, QApplication, QWidget, QMainWindow, QVBoxLa
 
 import employees
 
-first_name_of_employee = ""
-last_name_of_employee = ""
-
 
 class LoginWindow(QDialog):
     def __init__(self) -> None:
@@ -16,17 +13,18 @@ class LoginWindow(QDialog):
         loadUi('ui/login.ui', self)
         self.main_window = MainWindow(self)
 
+        self.employee_name = ''
         self.login_button.clicked.connect(self.log_in)
         self.showFullScreen()
-
 
     def log_in(self) -> None:
         code = str(self.login_input.text())
         log_data = employees.valid_code(code)
 
-        if log_data != False:
-            first_name_of_employee = log_data[1]
-            last_name_of_employee = log_data[2]
+        if log_data:
+            self.login_input.setText('')
+            self.employee_name = log_data
+
             self.main_window.showFullScreen()
             self.hide()
 
@@ -40,8 +38,6 @@ class MainWindow(QMainWindow):
         self.logout_button.clicked.connect(self.log_out)
 
     def log_out(self) -> None:
-        first_name_of_employee = ""
-        last_name_of_employee = ""
         self.hide()
         self.login_window.showFullScreen()
 
