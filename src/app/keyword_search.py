@@ -4,18 +4,18 @@ from unidecode import unidecode
 
 
 class Search:
-    def __init__(self, directory_path) -> None:
+    def __init__(self, directory_path: str) -> None:
         self.instructions_dir = directory_path
         self.words_in_pdf: dict[str, set[str]] = dict()
         self.preread_pdfs()
 
-    def preread_pdfs(self):
+    def preread_pdfs(self) -> None:
         for instruction in os.listdir(self.instructions_dir):
             if instruction.endswith('.pdf'):
                 self.read_pdf(instruction)
 
     def read_pdf(self, instruction: str) -> None:
-        set_of_words = set()
+        set_of_words: set[str] = set()
         for word in instruction.split():
             set_of_words.add(unidecode(word.lower()))
 
