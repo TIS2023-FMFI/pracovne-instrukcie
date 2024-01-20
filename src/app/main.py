@@ -4,6 +4,10 @@ from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QDialog, QApplication, QMainWindow, QListWidgetItem
 from PyQt5.QtCore import Qt
 from pdf_viewer import PDFViewer
+from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QDialog, QApplication, QWidget, QMainWindow, QVBoxLayout, QLabel, QLineEdit
+
+import employees
 
 
 class LoginWindow(QDialog):
@@ -11,13 +15,22 @@ class LoginWindow(QDialog):
         super(LoginWindow, self).__init__()
         loadUi('ui/login.ui', self)
         self.main_window = MainWindow(self)
+
+        self.employee_name = ''
+
         self.login_button.clicked.connect(self.log_in)
         self.showFullScreen()
 
     def log_in(self) -> None:
-        # TODO: login logistics
-        self.main_window.showFullScreen()
-        self.hide()
+        code = str(self.login_input.text())
+        log_data = employees.valid_code(code)
+
+        if log_data:
+            self.login_input.setText('')
+            self.employee_name = log_data
+
+            self.main_window.showFullScreen()
+            self.hide()
 
 
 class MainWindow(QMainWindow):
