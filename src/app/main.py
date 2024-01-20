@@ -41,7 +41,7 @@ class MainWindow(QMainWindow):
         loadUi('ui/main_window.ui', self)
 
         self.logout_button.clicked.connect(self.log_out)
-        self.search_button.clicked.connect(self.display_instructions)
+        self.search_input.textChanged.connect(self.display_instructions)
 
         self.instructions_dir: str = '../../resources/pdf/'
 
@@ -50,18 +50,23 @@ class MainWindow(QMainWindow):
         self.display_instructions()
 
     def display_instructions(self):
-        instruction_names = self.search_engine.filter_instructions(self.search_bar.text())
+        instruction_names = self.search_engine.filter_instructions(self.search_input.text())
 
         self.listWidget.clear()
         self.listWidget.itemClicked.connect(self.clicked)
+
+        # TODO: stop creating always new `QListWidgetItem` instruction each time
         for name in instruction_names:
             item = QListWidgetItem(name)
             item.setTextAlignment(Qt.AlignLeft)
             self.listWidget.addItem(item)
 
     def log_out(self) -> None:
-        self.hide()
+        self.search_input.setText('')
+        self.display_instructions()
+
         self.pdf_viewer.hide()
+        self.hide()
         self.login_window.showFullScreen()
 
     def clicked(self, item) -> None:
