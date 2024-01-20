@@ -38,7 +38,11 @@ class Search:
         if instruction not in self.words_in_pdf:
             self.read_pdf(instruction)
 
-        return keyword in self.words_in_pdf[instruction]
+        for word in self.words_in_pdf[instruction]:
+            if word.startswith(keyword):
+                return True
+
+        return False
 
     def filter_instructions(self, keyword: str = '') -> list[str]:
         return [
