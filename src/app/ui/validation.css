@@ -1,0 +1,35 @@
+QWidget {
+    background-color: #9ec9e7;
+
+}
+
+QLineEdit {
+    background-color: white;
+}
+
+QLabel{
+    font-size: 12px;
+}
+QPushButton {
+    border: 0.5px solid black;
+    background-color: rgb(224, 219, 219);
+    color: black;
+}
+
+QLabel#title{
+    font-size: 20px;
+}
+
+QPushButton#close_button {
+    border: none;
+    background-color: transparent;
+    padding: 10px 20px;
+}
+
+
+QComboBox{
+    background-color: white;
+}
+
+
+

@@ -1,0 +1,14 @@
+CREATE TABLE IF NOT EXISTS validations (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+name VARCHAR,
+date DATE DEFAULT CURRENT_DATE
+);
+/*
+CREATE TABLE IF NOT EXISTS instructions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    'name' VARCHAR,
+    file_path VARCHAR,
+    validation_date DATE DEFAULT CURRENT_DATE,
+    expiration_date DATE
+);
+*/

@@ -1,5 +1,3 @@
-from typing import Tuple
-
 from PyQt5 import QtCore
 import fitz
 import configparser

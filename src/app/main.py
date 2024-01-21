@@ -3,11 +3,15 @@ import os
 from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QDialog, QApplication, QMainWindow, QListWidgetItem
 from PyQt5.QtCore import Qt
-from pdf_viewer import PDFViewer
+from PyQt5 import QtGui
 from PyQt5 import QtWidgets
+
 from PyQt5.QtWidgets import QDialog, QApplication, QWidget, QMainWindow, QVBoxLayout, QLabel, QLineEdit
 
 import employees
+from pdf_viewer import PDFViewer
+from validation import Validation
+
 
 
 class LoginWindow(QDialog):
@@ -22,6 +26,11 @@ class LoginWindow(QDialog):
         self.showFullScreen()
 
     def log_in(self) -> None:
+        #########
+        self.main_window.showFullScreen()
+        self.hide()
+        ############
+
         code = str(self.login_input.text())
         log_data = employees.valid_code(code)
 
@@ -39,6 +48,7 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__()
         loadUi('ui/main_window.ui', self)
         self.logout_button.clicked.connect(self.log_out)
+        self.validate_button.clicked.connect( self.validate )
 
         self.instructions_dir: str = '../../resources/pdf/'
 
@@ -51,6 +61,8 @@ class MainWindow(QMainWindow):
             for instruction in os.listdir(self.instructions_dir) if instruction.endswith('.pdf')
         ]
         self.pdf_viewer: PDFViewer = PDFViewer(self)
+        self.validation_window = Validation()
+
         self.display_instructions()
 
     def display_instructions(self):
@@ -60,8 +72,13 @@ class MainWindow(QMainWindow):
             item.setTextAlignment(Qt.AlignLeft)
             self.listWidget.addItem(item)
 
+    def validate(self):
+        self.validation_window.hide()
+        self.validation_window.show()
+
     def log_out(self) -> None:
         self.hide()
+        self.validation_window.hide()
         self.pdf_viewer.hide()
         self.login_window.showFullScreen()
 
@@ -71,10 +88,18 @@ class MainWindow(QMainWindow):
     def open_instruction(self, file_name) -> None:
         # get display name from file name dict
         name: str = file_name
-        self.pdf_viewer.set_document(self.instructions_dir + file_name + '.pdf', name)
+        path = self.instructions_dir + file_name + '.pdf'
+        self.validation_window.set_file( name, path )
+        self.pdf_viewer.set_document( path, name)
+
         self.pdf_viewer.display()
 
 
+    
+    
+
+
+    
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     app.setStyleSheet(open('ui/login.css').read())
