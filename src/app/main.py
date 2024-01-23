@@ -8,18 +8,19 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QDialog, QApplication, QWidget, QMainWindow, QVBoxLayout, QLabel, QLineEdit
 
 import employees
+from keyword_search import Search
 
 
 class LoginWindow(QDialog):
     def __init__(self) -> None:
         super(LoginWindow, self).__init__()
         loadUi('ui/login.ui', self)
-        self.main_window = MainWindow(self)
 
         self.employee_name = ''
-
         self.login_button.clicked.connect(self.log_in)
+
         self.showFullScreen()
+        self.main_window = MainWindow(self)
 
     def log_in(self) -> None:
         code = str(self.login_input.text())
@@ -38,31 +39,33 @@ class MainWindow(QMainWindow):
         self.login_window: QDialog = login_window
         super(MainWindow, self).__init__()
         loadUi('ui/main_window.ui', self)
+
         self.logout_button.clicked.connect(self.log_out)
+        self.search_input.textChanged.connect(self.display_instructions)
 
         self.instructions_dir: str = '../../resources/pdf/'
 
-        self.instructions: list[str] = [
-            self.instructions_dir + instruction
-            for instruction in os.listdir(self.instructions_dir) if instruction.endswith('.pdf')
-        ]
-        self.instruction_names: list[str] = [
-            instruction.removesuffix('.pdf')
-            for instruction in os.listdir(self.instructions_dir) if instruction.endswith('.pdf')
-        ]
+        self.search_engine: Search = Search(self.instructions_dir)
+        self.listWidget.itemClicked.connect(self.clicked)
         self.pdf_viewer: PDFViewer = PDFViewer(self)
         self.display_instructions()
 
     def display_instructions(self):
-        self.listWidget.itemClicked.connect(self.clicked)
-        for name in self.instruction_names:
+        instruction_names: list[str] = self.search_engine.filter_instructions(self.search_input.text())
+
+        self.listWidget.clear()
+
+        for name in instruction_names:
             item = QListWidgetItem(name)
             item.setTextAlignment(Qt.AlignLeft)
             self.listWidget.addItem(item)
 
     def log_out(self) -> None:
-        self.hide()
+        self.search_input.setText('')
+        self.display_instructions()
+
         self.pdf_viewer.hide()
+        self.hide()
         self.login_window.showFullScreen()
 
     def clicked(self, item) -> None:

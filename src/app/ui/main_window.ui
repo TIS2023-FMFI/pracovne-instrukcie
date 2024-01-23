@@ -140,18 +140,11 @@
                         <item>
                             <layout class="QHBoxLayout" name="upper_search">
                                 <item>
-                                    <widget class="QLineEdit" name="search_bar">
+                                    <widget class="QLineEdit" name="search_input">
                                         <property name="styleSheet">
                                             <string notr="true"/>
                                         </property>
-                                    </widget>
-                                </item>
-                                <item>
-                                    <widget class="QPushButton" name="search_button">
-                                        <property name="styleSheet">
-                                            <string notr="true"/>
-                                        </property>
-                                        <property name="text">
+                                        <property name="placeholderText">
                                             <string>Search</string>
                                         </property>
                                     </widget>
