@@ -1,9 +1,19 @@
 import csv
+import configparser
 
 file_path = '../../resources/employees.csv'
 
 
-def valid_code(code: str) -> str | bool:
+def verify_admin(code: str) -> bool:
+    config: configparser = configparser.ConfigParser()
+    config.read('config.ini')
+    if code == config.get('Admin', 'password'):
+        return True
+
+    return False
+
+
+def get_username(code: str) -> str | None:
     # TODO:
     #  read_file() save in buffer (unless changed file by admin)
     #  load with start (init)
@@ -13,8 +23,7 @@ def valid_code(code: str) -> str | bool:
         name = employees[code]
         return name
 
-    else:
-        return False
+    return None
 
 
 def read_file() -> dict[str, str]:
@@ -25,7 +34,7 @@ def read_file() -> dict[str, str]:
 
         for line in csvreader:
             code = line[0]
-            name = line[2]+ ' ' + line[1]
+            name = line[2] + ' ' + line[1]
 
             employees[code] = name
 

@@ -12,31 +12,38 @@ from keyword_search import Search
 
 
 class LoginWindow(QDialog):
-    def __init__(self) -> None:
+    def __init__(self, main_window) -> None:
+        self.main_window = main_window
+
         super(LoginWindow, self).__init__()
         loadUi('ui/login.ui', self)
 
-        self.employee_name = ''
         self.login_button.clicked.connect(self.log_in)
 
-        self.showFullScreen()
-        self.main_window = MainWindow(self)
-
     def log_in(self) -> None:
-        code = str(self.login_input.text())
-        log_data = employees.valid_code(code)
+        password_input = str(self.login_input.text())
+        username = employees.get_username(password_input)
+        isAdmin = employees.verify_admin(password_input)
 
-        if log_data:
+        if isAdmin:
+            username = 'Admin'
+
+        if username is not None:
             self.login_input.setText('')
-            self.employee_name = log_data
+            self.main_window.log_in(username, isAdmin)
 
             self.main_window.showFullScreen()
             self.hide()
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, login_window) -> None:
-        self.login_window: QDialog = login_window
+    def __init__(self) -> None:
+        self.login_window: QDialog = LoginWindow(self)
+        self.login_window.showFullScreen()
+
+        self.username = ''
+        self.is_admin = False
+
         super(MainWindow, self).__init__()
         loadUi('ui/main_window.ui', self)
 
@@ -60,13 +67,18 @@ class MainWindow(QMainWindow):
             item.setTextAlignment(Qt.AlignLeft)
             self.listWidget.addItem(item)
 
+    def log_in(self, username, is_admin):
+        self.username = username
+        self.is_admin = is_admin
+        print(username, is_admin)
+
     def log_out(self) -> None:
         self.search_input.setText('')
         self.display_instructions()
 
         self.pdf_viewer.hide()
-        self.hide()
         self.login_window.showFullScreen()
+        self.hide()
 
     def clicked(self, item) -> None:
         self.open_instruction(item.text())
@@ -81,5 +93,5 @@ class MainWindow(QMainWindow):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     app.setStyleSheet(open('ui/login.css').read())
-    w = LoginWindow()
+    w = MainWindow()
     app.exec()
