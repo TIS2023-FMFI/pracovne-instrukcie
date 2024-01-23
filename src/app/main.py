@@ -46,16 +46,15 @@ class MainWindow(QMainWindow):
         self.instructions_dir: str = '../../resources/pdf/'
 
         self.search_engine: Search = Search(self.instructions_dir)
+        self.listWidget.itemClicked.connect(self.clicked)
         self.pdf_viewer: PDFViewer = PDFViewer(self)
         self.display_instructions()
 
     def display_instructions(self):
-        instruction_names = self.search_engine.filter_instructions(self.search_input.text())
+        instruction_names: list[str] = self.search_engine.filter_instructions(self.search_input.text())
 
         self.listWidget.clear()
-        self.listWidget.itemClicked.connect(self.clicked)
 
-        # TODO: stop creating always new `QListWidgetItem` instruction each time
         for name in instruction_names:
             item = QListWidgetItem(name)
             item.setTextAlignment(Qt.AlignLeft)
