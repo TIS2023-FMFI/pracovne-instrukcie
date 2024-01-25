@@ -119,6 +119,7 @@ class MainWindow(QMainWindow):
         )
 
         self.validation_window.show()
+        self.display_instructions()
 
     def log_in(self, username: str, is_admin: bool) -> None:
         self.username = username

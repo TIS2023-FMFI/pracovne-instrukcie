@@ -61,5 +61,4 @@ class Validation(QWidget):
 
         print(self.database.execute_query(f"select * from instructions where id = {self.id}"))
 
-        # TODO: refresh display instructions
         self.close_validation()
