@@ -117,9 +117,9 @@
                             </widget>
                         </item>
                         <item>
-                            <widget class="QPushButton" name="validate_button">
+                            <widget class="QPushButton" name="histogram_button">
                                 <property name="text">
-                                    <string>Validate</string>
+                                    <string>Histogram</string>
                                 </property>
                             </widget>
                         </item>

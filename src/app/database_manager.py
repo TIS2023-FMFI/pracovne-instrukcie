@@ -7,13 +7,10 @@ class DBManager:
         self.database_name = database_name
 
     
-    def execute_query(self, query, params=None):
+    def execute_query(self, query):
         conn = sqlite3.connect(self.database_name)
         cursor = conn.cursor()
-        if params:
-            cursor.execute(query, params)
-        else:
-            cursor.execute(query)
+        cursor.execute(query)
         conn.commit()
         result = cursor.fetchall()
         conn.close()
@@ -22,7 +19,7 @@ class DBManager:
 
     def run_script( self, script_file ) -> None:
         conn = sqlite3.connect(self.database_name)
-        with open( script_file, 'r' ) as sf:
+        with open( script_file, 'r', encoding = 'utf=8' ) as sf:
             script = sf.read()
             conn.executescript( script )
         conn.commit()
@@ -34,10 +31,9 @@ class DBManager:
 
 
 if __name__ == "__main__":
-    db = DBManager()
+    db = DBManager()    
     db.run_script( "create_script.sql" )
 
-    
 
     
      
