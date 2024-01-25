@@ -70,10 +70,11 @@ class MainWindow(QMainWindow):
     def log_in(self, username, is_admin):
         self.username = username
         self.is_admin = is_admin
-        print(username, is_admin)
+        self.username_label.setText(username)
 
     def log_out(self) -> None:
         self.search_input.setText('')
+        self.username_label.setText('')
         self.display_instructions()
 
         self.pdf_viewer.hide()
