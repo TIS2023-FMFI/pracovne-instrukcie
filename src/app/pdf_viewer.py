@@ -1,6 +1,7 @@
-from PyQt5 import QtCore
 import fitz
 import configparser
+
+from PyQt5 import QtCore
 from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QWidget, QGraphicsScene, QGraphicsPixmapItem, QGraphicsLineItem
 from PyQt5.QtGui import QPixmap
@@ -20,6 +21,7 @@ class PDFViewer(QWidget):
         loadUi('ui/pdf.ui', self)
         self.setStyleSheet(open('ui/pdf.css').read())
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
+
         self.pushButton.clicked.connect(lambda: self.hide())
         self.screen_width, self.screen_height = get_screen_resolution()
         self.w: int = 1100
