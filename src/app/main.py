@@ -21,9 +21,9 @@ class LoginWindow(QDialog):
         self.login_button.clicked.connect(self.log_in)
 
     def log_in(self) -> None:
-        password_input = str(self.login_input.text())
-        username = employees.get_username(password_input)
-        isAdmin = employees.verify_admin(password_input)
+        password_input: str = str(self.login_input.text())
+        username: str = employees.get_username(password_input)
+        isAdmin: bool = employees.verify_admin(password_input)
 
         if isAdmin:
             username = 'Admin'
@@ -41,8 +41,8 @@ class MainWindow(QMainWindow):
         self.login_window: QDialog = LoginWindow(self)
         self.login_window.showFullScreen()
 
-        self.username = ''
-        self.is_admin = False
+        self.username: str = ''
+        self.is_admin: bool = False
 
         super(MainWindow, self).__init__()
         loadUi('ui/main_window.ui', self)
@@ -52,8 +52,8 @@ class MainWindow(QMainWindow):
 
         self.instructions_dir: str = '../../resources/pdf/'
 
-        self.search_engine: Search = Search(self.instructions_dir)
         self.listWidget.itemClicked.connect(self.clicked)
+        self.search_engine: Search = Search(self.instructions_dir)
         self.pdf_viewer: PDFViewer = PDFViewer(self)
         self.display_instructions()
 
