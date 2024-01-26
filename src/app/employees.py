@@ -1,5 +1,8 @@
 import csv
 import configparser
+from csv import writer
+
+from PyQt5.QtWidgets import QLabel, QVBoxLayout, QMessageBox, QPushButton, QLineEdit, QDialog
 
 file_path = '../../resources/employees.csv'
 
@@ -11,7 +14,6 @@ def verify_admin(code: str) -> bool:
         return True
 
     return False
-
 
 def get_username(code: str) -> str | None:
     # TODO:
@@ -39,3 +41,11 @@ def read_file() -> dict[str, str]:
             employees[code] = name
 
     return employees
+
+def add_employee(code: str, name:str):
+    with open(file_path, 'a', newline='', encoding='utf-8') as file:
+        space = name.index(' ')
+        writer_object = writer(file)
+        writer_object.writerow([code, name[:space], name[space+1:]])
+        file.close()
+
