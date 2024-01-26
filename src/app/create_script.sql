@@ -69,26 +69,11 @@ INSERT INTO instructions ( name, file_path, expiration_date ) VALUES
 ('PLNR MIND 03.02 Nakládka a expedícia','../../resources/pdf/PLNR MIND 03.02 Nakládka a expedícia.pdf','2024-07-25'),
 ('PNRIAC 11.01 Proces monitorovania skladovych zasob','../../resources/pdf/PNRIAC 11.01 Proces monitorovania skladovych zasob.pdf','2024-07-25');
 
-/*random test values for histogram
+/*random test values for histogram*/
 INSERT INTO validations (name, date)
 VALUES 
   ('Alice Johnson', '2023-01-30'),
-  ('Bob Williams', '2023-02-1'),
-  ('Charlie Davis', '2023-02-05'),
-  ('David Smith', '2023-03-12'),
-  ('Emma Taylor', '2023-03-30'),
-  ('Frank Miller', '2023-03-12'),
-  ('Grace Wilson', '2023-04-03'),
-  ('Henry Brown', '2023-04-18'),
-  ('Ivy Moore', '2023-04-22'),
-  ('Jack Robinson', '2023-04-05'),
-  ('Katherine Lee', '2023-05-17'),
-  ('Leo Turner', '2023-06-06'),
-  ('Mia Scott', '2023-07-20'),
-  ('Nathan Harris', '2023-08-08'),
-  ('Olivia Hall', '2023-09-14'),
-  ('Paul Adams', '2023-10-29'),
-  ('Paul Adams', '2023-11-29'),
-  ('Paul Adams', '2023-12-29'),
-  ('Paul Adams', '2023-12-29');
-  */
+  ('Alice Johnson', '2022-01-30'),
+  ('Alice Johnson', '2023-02-01'),
+  ('Alice Johnson', '2023-07-30');
+

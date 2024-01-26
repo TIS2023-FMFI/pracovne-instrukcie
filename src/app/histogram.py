@@ -20,8 +20,7 @@ def sort_data(dates) -> tuple:
 
     for date_data in dates:
         date: datetime = datetime.datetime.strptime(date_data[0], '%Y-%m-%d')
-        delta: timedelta = today - date
-        if delta.days <= 365:
+        if date.month != current_month or today.year == date.year:
             number_of_validations[date.month - 1] += 1
 
     months: Sequence[str] = calendar.month_name[1:]
