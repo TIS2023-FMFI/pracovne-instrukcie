@@ -106,6 +106,7 @@ QMessageBox QPushButton:hover {
     background-color: #2980b9;
 }
 
+
 QListWidget {
     color: #000000;
     background-color: #0c9aff;
@@ -116,14 +117,15 @@ QListWidget {
 }
 
 QListWidget::item {
+    
     background-color: #75c5ff;
     margin-top: 10px;
     margin-right: 5px;
-    height: 75px;
+    padding-left: 15px;
+    height: 100px;
     border: 0.5px solid #353232;
     border-radius: 5px;
-    padding-left: 15px;
-    padding-top: 15px;
+    
 
 }
 
@@ -138,5 +140,14 @@ QScrollBar:vertical {
     background: #75c5ff;
     border: none;
     width: 15px;
+
+}
+
+
+QWidget#button_placeholder{
+    padding-left: 15px;
+    padding-right: 15px;
+    width: 50px;
+    background-color: transparent;
 
 }
