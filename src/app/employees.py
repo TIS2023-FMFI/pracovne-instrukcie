@@ -1,6 +1,5 @@
 import csv
 import configparser
-from csv import writer
 
 from PyQt5.QtWidgets import QLabel, QVBoxLayout, QMessageBox, QPushButton, QLineEdit, QDialog
 from PyQt5.uic import loadUi
@@ -15,6 +14,7 @@ def verify_admin(code: str) -> bool:
         return True
 
     return False
+
 
 def get_username(code: str) -> str | None:
     # TODO:
@@ -45,8 +45,3 @@ def read_file() -> dict[str, str]:
 
 
 
-def add_employee(code: str, first_name:str, last_name:str):
-    with open(file_path, 'a', newline='', encoding='utf-8') as file:
-        writer_object = writer(file)
-        writer_object.writerow([code, first_name, last_name])
-        file.close()
