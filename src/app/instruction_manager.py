@@ -39,6 +39,11 @@ class InstructionManager( QWidget ):
         self.instruction_id = None
         self.signal.emit()
 
+
+    def display_window( self ):
+        self.hide()
+        self.show()
+        
     def add_instruction( self ) -> None:
         name: str = self.instruction_name.text()
         path: str = self.path_label.text()

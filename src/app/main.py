@@ -72,13 +72,10 @@ class MainWindow(QMainWindow):
             for instruction in os.listdir(self.instructions_dir)
             if instruction.endswith('.pdf')
         ]
-        ##############
-        '''
+       
         # Search Instructions
         self.search_engine: Search = Search(self.instructions_dir)
         self.search_input.textChanged.connect(self.display_instructions)
-        '''
-        #################
 
         # Database
         self.database = DBManager()
@@ -98,15 +95,13 @@ class MainWindow(QMainWindow):
 
         # Add/Delete instruction
         self.instruction_manager = InstructionManager()
-        self.add_instruction_button.clicked.connect(self.add)
+        self.add_instruction_button.clicked.connect(self.instruction_manager.display_window)
         self.instruction_manager.signal.connect(self.display_instructions)
 
     def display_instructions(self) -> None:
         # TODO: replace with DB query?
-        #############
-        #instruction_names: list[str] = self.search_engine.filter_instructions(self.search_input.text())
-        instruction_names = self.database.execute_query(f"select id, name from instructions")
-        ###########
+        instruction_names: list[str] = self.search_engine.filter_instructions(self.search_input.text())
+        #instruction_names = self.database.execute_query(f"select id, name from instructions")
         self.listWidget.clear()
         for i, name in enumerate(instruction_names):
             item = QListWidgetItem(name)
@@ -121,7 +116,6 @@ class MainWindow(QMainWindow):
             button2.setStyleSheet("QPushButton{ background-color: red;}")
             button2.setObjectName(str(i + 1))
             button2.clicked.connect(self.delete)
-
 
             item_layout = QHBoxLayout()
             item_layout.addStretch()
@@ -148,11 +142,6 @@ class MainWindow(QMainWindow):
         instruction_id = int(self.sender().objectName())
         self.instruction_manager.confirmation( instruction_id )
 
-
-    def add( self ):
-        self.instruction_manager.hide()
-        self.instruction_manager.show()
-
     def log_in(self, username: str, is_admin: bool) -> None:
         self.username = username
         self.is_admin = is_admin
@@ -164,6 +153,7 @@ class MainWindow(QMainWindow):
         self.pdf_viewer.hide()
         self.validation_window.hide()
         self.histogram.hide()
+        self.instruction_manager.hide()
 
         self.display_instructions()
 
@@ -174,6 +164,7 @@ class MainWindow(QMainWindow):
         self.open_instruction(item.text())
 
     def open_instruction(self, file_name: str) -> None:
+        #TODO: replace with db query
         name: str = file_name
         path = self.instructions_dir + file_name + '.pdf'
         self.pdf_viewer.set_document(path, name)
