@@ -1,14 +1,11 @@
 import sys
 import os
 
-from PyQt5.uic import loadUi
-from PyQt5.QtWidgets import QDialog, QApplication, QMainWindow, QListWidgetItem
-from PyQt5.QtCore import Qt
 from PyQt5 import QtGui
-from PyQt5 import QtWidgets
-
+from PyQt5.uic import loadUi
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QDialog, QApplication, QWidget, QMainWindow, QHBoxLayout, QLabel, QPushButton, \
-    QToolButton, QSpacerItem
+    QToolButton, QSpacerItem, QListWidgetItem, QMessageBox
 
 import employees
 
@@ -16,6 +13,7 @@ from pdf_viewer import PDFViewer
 from validation import Validation
 from histogram import Histogram
 from keyword_search import Search
+from add_employee import AddEmployee
 
 
 class LoginWindow(QDialog):
@@ -54,6 +52,10 @@ class MainWindow(QMainWindow):
         self.username: str = ''
         self.is_admin: bool = False
         self.logout_button.clicked.connect(self.log_out_user)
+
+        # Add new Employee
+        self.add_employee: AddEmployee = AddEmployee()
+        self.add_employee_button.clicked.connect(self.add_employee.show_window)
 
         # Instructions
         self.instructions_dir: str = '../../resources/pdf/'
