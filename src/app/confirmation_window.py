@@ -1,17 +1,12 @@
-
 from PyQt5.uic import loadUi
-from PyQt5.QtWidgets import QDialog, QApplication, QMainWindow, QListWidgetItem
 from PyQt5.QtCore import Qt
-from PyQt5 import QtGui
-from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QDialog, QApplication, QWidget, QMainWindow, QHBoxLayout, QLabel, QPushButton, \
-    QToolButton, QSpacerItem
+from PyQt5.QtWidgets import QWidget
 from PyQt5.QtCore import Qt
 from PyQt5.QtCore import pyqtSignal   
 
 
 class ConfirmationWindow( QWidget ):
-    signal = pyqtSignal()
+    signal: pyqtSignal = pyqtSignal()
     def __init__( self ) -> None:
         QWidget.__init__(self)
         loadUi( "ui/confirmation_window.ui", self )
@@ -26,9 +21,8 @@ class ConfirmationWindow( QWidget ):
         self.signal.emit()
         self.close()
         
-    
     def set_title( self, name ) -> None:
-        text = "Vymazať " + name + "?"
+        text: str = "Vymazať " + name + " ?"
         self.title.setText( text )
 
 
