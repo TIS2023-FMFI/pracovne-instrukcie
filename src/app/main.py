@@ -1,14 +1,11 @@
 import sys
 import os
 
-from PyQt5.uic import loadUi
-from PyQt5.QtWidgets import QDialog, QApplication, QMainWindow, QListWidgetItem, QPushButton, QMessageBox
-from PyQt5.QtCore import Qt
 from PyQt5 import QtGui
-from PyQt5 import QtWidgets
-
+from PyQt5.uic import loadUi
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QDialog, QApplication, QWidget, QMainWindow, QHBoxLayout, QLabel, QPushButton, \
-    QToolButton, QSpacerItem
+    QToolButton, QSpacerItem, QListWidgetItem, QMessageBox
 
 import employees
 
@@ -58,7 +55,7 @@ class MainWindow(QMainWindow):
 
         # Add new Employee
         self.add_employee: AddEmployee = AddEmployee()
-        self.add_employee_button.clicked.connect(self.add_employee.add_employee_window)
+        self.add_employee_button.clicked.connect(self.add_employee.show_window)
 
         # Instructions
         self.instructions_dir: str = '../../resources/pdf/'

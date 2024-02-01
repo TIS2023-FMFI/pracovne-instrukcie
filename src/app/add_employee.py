@@ -15,9 +15,12 @@ class AddEmployee(QWidget):
         self.employees_file_path = '../../resources/employees.csv'
 
         self.add_button.clicked.connect(self.button_add_clicked)
-        self.close_button.clicked.connect(self.close_widget)
+        self.close_button.clicked.connect(self.close_window)
 
-    def button_add_clicked(self):
+    def show_window(self) -> None:
+        self.show()
+
+    def button_add_clicked(self) -> None:
         form_names = [self.code.text().strip(), self.last_name.text().strip(), self.first_name.text().strip()]
         if any(form == '' for form in form_names):
             # TODO: let the user know
@@ -31,10 +34,7 @@ class AddEmployee(QWidget):
                 writer_object.writerow(form_names)
                 file.close()
 
-    def add_employee_window(self) -> None:
-        self.show()
-
-    def close_widget(self):
+    def close_window(self) -> None:
         self.code.setText('')
         self.last_name.setText('')
         self.first_name.setText('')

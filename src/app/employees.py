@@ -1,9 +1,6 @@
 import csv
 import configparser
 
-from PyQt5.QtWidgets import QLabel, QVBoxLayout, QMessageBox, QPushButton, QLineEdit, QDialog
-from PyQt5.uic import loadUi
-
 file_path = '../../resources/employees.csv'
 
 
@@ -17,9 +14,6 @@ def verify_admin(code: str) -> bool:
 
 
 def get_username(code: str) -> str | None:
-    # TODO:
-    #  read_file() save in buffer (unless changed file by admin)
-    #  load with start (init)
     employees = read_file()
 
     if code in employees:
@@ -42,6 +36,3 @@ def read_file() -> dict[str, str]:
             employees[code] = name
 
     return employees
-
-
-
