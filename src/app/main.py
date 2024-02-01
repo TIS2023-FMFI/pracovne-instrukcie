@@ -10,7 +10,7 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QDialog, QApplication, QWidget, QMainWindow, QHBoxLayout, QLabel, QPushButton, \
     QToolButton, QSpacerItem
 
-from PyQt5.QtCore import pyqtSignal           
+          
 
 import employees
 
@@ -79,6 +79,10 @@ class MainWindow(QMainWindow):
         self.search_input.textChanged.connect(self.display_instructions)
         '''
         #################
+
+        # Database
+        self.database = DBManager()
+
         # View Instructions
         self.pdf_viewer: PDFViewer = PDFViewer(self)
         self.listWidget.itemClicked.connect(self.clicked)
@@ -86,28 +90,24 @@ class MainWindow(QMainWindow):
 
         # Validate Instructions
         self.validation_window: Validation = Validation(self.instructions_dir)
+        self.validation_window.signal.connect(self.display_instructions)
 
         # Histogram
         self.histogram: Histogram = Histogram()
         self.histogram_button.clicked.connect(self.histogram.plot_histogram)
 
-        # Add instruction
+        # Add/Delete instruction
         self.instruction_manager = InstructionManager()
         self.add_instruction_button.clicked.connect(self.add)
-
-        # Database
-        self.database = DBManager()
-
-        
+        self.instruction_manager.signal.connect(self.display_instructions)
 
     def display_instructions(self) -> None:
         # TODO: replace with DB query?
         #############
         #instruction_names: list[str] = self.search_engine.filter_instructions(self.search_input.text())
-        instruction_names = self.instruction_names
+        instruction_names = self.database.execute_query(f"select id, name from instructions")
         ###########
         self.listWidget.clear()
-
         for i, name in enumerate(instruction_names):
             item = QListWidgetItem(name)
             item_widget = QWidget()
@@ -142,16 +142,11 @@ class MainWindow(QMainWindow):
             self.instruction_names[validation_id - 1],
             self.instructions[validation_id - 1]
         )
-
         self.validation_window.show()
-        #TODO refresh instructions. has to refresh after clicking validate
-        self.display_instructions()
-
+        
     def delete( self ):
         instruction_id = int(self.sender().objectName())
         self.instruction_manager.confirmation( instruction_id )
-        #TODO refresh instructions. has to refresh after clicking delete
-        self.display_instructions()
 
 
     def add( self ):

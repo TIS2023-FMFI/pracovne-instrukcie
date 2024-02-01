@@ -7,8 +7,10 @@ import datetime
 from dateutil.relativedelta import relativedelta
 from confirmation_window import ConfirmationWindow
 from database_manager import DBManager
+from PyQt5.QtCore import pyqtSignal
 
 class InstructionManager( QWidget ):
+    signal: pyqtSignal = pyqtSignal()
     def __init__( self ) -> None:
         QWidget.__init__( self )
         loadUi( "ui/add_instruction.ui", self )
@@ -35,6 +37,7 @@ class InstructionManager( QWidget ):
         query = f"delete from instructions where id = {self.instruction_id}"
         self.database.execute_query( query )
         self.instruction_id = None
+        self.signal.emit()
 
     def add_instruction( self ) -> None:
         name: str = self.instruction_name.text()
@@ -49,6 +52,7 @@ class InstructionManager( QWidget ):
         query = f" insert into instructions ( name, file_path, validation_date, expiration_date )\
         values('{name}','{path}','{validation_date}','{expiration_date.date()}')"
         self.database.execute_query( query )
+        self.signal.emit()
         self.hide()
 
 
