@@ -9,6 +9,7 @@ from PyQt5.QtWidgets import QDialog, QApplication, QWidget, QMainWindow, QVBoxLa
 
 import employees
 from keyword_search import Search
+from add_employee import AddEmployee
 
 
 class LoginWindow(QDialog):
@@ -48,8 +49,10 @@ class MainWindow(QMainWindow):
         loadUi('ui/main_window.ui', self)
 
         self.logout_button.clicked.connect(self.log_out)
-        self.add_employee_button.clicked.connect(self.add_employee_window)
         self.search_input.textChanged.connect(self.display_instructions)
+
+        self.add_employee: AddEmployee = AddEmployee()
+        self.add_employee_button.clicked.connect(self.add_employee.add_employee_window)
 
         self.instructions_dir: str = '../../resources/pdf/'
 
@@ -90,21 +93,6 @@ class MainWindow(QMainWindow):
         name: str = file_name
         self.pdf_viewer.set_document(self.instructions_dir + file_name + '.pdf', name)
         self.pdf_viewer.display()
-
-    def add_employee_window(self):
-        ## open window (add_employee)
-        ...
-        self.add_button.clicked().connect(self.button_add_clicked())
-
-    def button_add_clicked(self):
-        if self.code.text().strip() == '' or self.first_name.text().strip() == '' or self.first_name.text().strip() == '':
-            ## window, which will say that everything must be fulfilled
-            ...
-        else:
-            employees.add_employee(self.code.text(), self.first_name.text(), self.last_name)
-
-
-
 
 
 if __name__ == '__main__':
