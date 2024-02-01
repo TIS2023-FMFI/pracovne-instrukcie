@@ -14,6 +14,7 @@ from validation import Validation
 from histogram import Histogram
 from keyword_search import Search
 from add_employee import AddEmployee
+from delete_employee import DeleteEmployee
 
 
 class LoginWindow(QDialog):
@@ -56,6 +57,10 @@ class MainWindow(QMainWindow):
         # Add new Employee
         self.add_employee: AddEmployee = AddEmployee()
         self.add_employee_button.clicked.connect(self.add_employee.show_window)
+
+        # Delete Employee
+        self.delete_employee: DeleteEmployee = DeleteEmployee()
+        self.delete_employee_button.clicked.connect(self.delete_employee.show_window)
 
         # Instructions
         self.instructions_dir: str = '../../resources/pdf/'
