@@ -13,7 +13,9 @@ from pdf_viewer import PDFViewer
 from validation import Validation
 from histogram import Histogram
 from keyword_search import Search
+from user_history import History
 from add_employee import AddEmployee
+
 
 
 class LoginWindow(QDialog):
@@ -51,6 +53,8 @@ class MainWindow(QMainWindow):
         # User
         self.username: str = ''
         self.is_admin: bool = False
+        self.history: History = History()
+        self.user_history: list[str] = []
         self.logout_button.clicked.connect(self.log_out_user)
 
         # Add new Employee
@@ -92,6 +96,9 @@ class MainWindow(QMainWindow):
         self.is_admin = is_admin
         self.username_label.setText(username)
 
+        self.user_history = self.history.get_user_history(self.username)
+        self.display_instructions()
+
     def log_out_user(self) -> None:
         self.username_label.setText('')
         self.search_input.setText('')
@@ -106,7 +113,8 @@ class MainWindow(QMainWindow):
 
     def display_instructions(self) -> None:
         # TODO: replace with DB query?
-        instruction_names: list[str] = self.search_engine.filter_instructions(self.search_input.text())
+        instruction_names: list[str] = self.search_engine.filter_instructions(self.search_input.text(),
+                                                                              tuple(self.user_history))
         self.listWidget.clear()
 
         for i, name in enumerate(instruction_names):
@@ -131,6 +139,7 @@ class MainWindow(QMainWindow):
         path = self.instructions_dir + file_name + '.pdf'
         self.pdf_viewer.set_document(path, name)
         self.pdf_viewer.display()
+        self.history.log_open_instruction(self.username, name)
 
     def validate_instruction(self):
         self.validation_window.hide()

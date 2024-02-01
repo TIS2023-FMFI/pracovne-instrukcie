@@ -44,9 +44,17 @@ class Search:
 
         return False
 
-    def filter_instructions(self, keyword: str = '') -> list[str]:
-        return [
+    def filter_instructions(self, keyword: str = '', user_history: tuple[str] = ()) -> list[str]:
+        instructions: list[str] = [
             instruction.removesuffix('.pdf')
             for instruction in os.listdir(self.instructions_dir)
             if instruction.endswith('.pdf') and self.contains_keyword(instruction, unidecode(keyword.lower()))
         ]
+
+        output: list[str] = []
+        for instruction in user_history:
+            if instruction in instructions:
+                output.append(instruction)
+                instructions.remove(instruction)
+
+        return output + instructions

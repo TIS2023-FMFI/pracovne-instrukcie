@@ -117,3 +117,11 @@ VALUES ('Alice Johnson', '2023-01-30'),
        ('Alice Johnson', '2022-01-30'),
        ('Alice Johnson', '2023-02-01'),
        ('Alice Johnson', '2023-07-30');
+
+------------------------------------------ HISTORY ------------------------------------------
+CREATE TABLE IF NOT EXISTS history
+(
+    id               INTEGER PRIMARY KEY AUTOINCREMENT,
+    username         VARCHAR,
+    instruction_name VARCHAR
+);
