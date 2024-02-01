@@ -92,36 +92,16 @@ class MainWindow(QMainWindow):
         self.pdf_viewer.display()
 
     def add_employee_window(self):
-        new_window = QDialog(self)
-        new_window.setWindowTitle('Add employee')
+        ## open window (add_employee)
+        ...
+        self.add_button.clicked().connect(self.button_add_clicked())
 
-        code = QLineEdit(new_window)
-        code.setObjectName('code')
-        name = QLineEdit(new_window)
-        name.setObjectName('name')
-        button_add = QPushButton('Add employee', new_window)
-        new_window_layout = QVBoxLayout()
-        new_window_layout.addWidget(QLabel('code:', new_window))
-        new_window_layout.addWidget(code)
-        new_window_layout.addWidget(QLabel('name:', new_window))
-        new_window_layout.addWidget(name)
-        new_window_layout.addWidget(button_add)
-        new_window.setLayout(new_window_layout)
-
-        button_add.clicked.connect(self.on_ok_button_clicked)
-        new_window.exec_()
-
-    def on_ok_button_clicked(self):
-        sender_button = self.sender()
-        new_window = sender_button.parent()
-        code = new_window.findChild(QLineEdit, 'code')
-        name = new_window.findChild(QLineEdit, 'name')
-
-        if code.text().strip() == '' or name.text().strip() == '':
-            QMessageBox.warning(new_window, 'Missing data', 'All fields must be filled in.')
+    def button_add_clicked(self):
+        if self.code.text().strip() == '' or self.first_name.text().strip() == '' or self.first_name.text().strip() == '':
+            ## window, which will say that everything must be fulfilled
+            ...
         else:
-            employees.add_employee(code.text(), name.text())
-            new_window.accept()
+            employees.add_employee(self.code.text(), self.first_name.text(), self.last_name)
 
 
 
