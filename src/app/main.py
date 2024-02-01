@@ -10,13 +10,17 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QDialog, QApplication, QWidget, QMainWindow, QHBoxLayout, QLabel, QPushButton, \
     QToolButton, QSpacerItem
 
+from PyQt5.QtCore import pyqtSignal           
+
 import employees
 
 from pdf_viewer import PDFViewer
 from validation import Validation
 from histogram import Histogram
 from keyword_search import Search
-
+from instruction_manager import InstructionManager
+from confirmation_window import ConfirmationWindow
+from database_manager import DBManager
 
 class LoginWindow(QDialog):
     def __init__(self, main_window) -> None:
@@ -68,11 +72,13 @@ class MainWindow(QMainWindow):
             for instruction in os.listdir(self.instructions_dir)
             if instruction.endswith('.pdf')
         ]
-
+        ##############
+        '''
         # Search Instructions
         self.search_engine: Search = Search(self.instructions_dir)
         self.search_input.textChanged.connect(self.display_instructions)
-
+        '''
+        #################
         # View Instructions
         self.pdf_viewer: PDFViewer = PDFViewer(self)
         self.listWidget.itemClicked.connect(self.clicked)
@@ -85,9 +91,22 @@ class MainWindow(QMainWindow):
         self.histogram: Histogram = Histogram()
         self.histogram_button.clicked.connect(self.histogram.plot_histogram)
 
+        # Add instruction
+        self.instruction_manager = InstructionManager()
+        self.add_instruction_button.clicked.connect(self.instruction_manager.show)
+
+        # Database
+        self.database = DBManager()
+        print( self.database.execute_query( "select * from instructions"))
+
+        
+
     def display_instructions(self) -> None:
         # TODO: replace with DB query?
-        instruction_names: list[str] = self.search_engine.filter_instructions(self.search_input.text())
+        #############
+        #instruction_names: list[str] = self.search_engine.filter_instructions(self.search_input.text())
+        instruction_names = self.instruction_names
+        ###########
         self.listWidget.clear()
 
         for i, name in enumerate(instruction_names):
@@ -99,9 +118,16 @@ class MainWindow(QMainWindow):
             button.setObjectName(str(i + 1))
             button.clicked.connect(self.validate)
 
+            button2 = QPushButton("Vymazať")
+            button2.setStyleSheet("QPushButton{ background-color: red;}")
+            button2.setObjectName(str(i + 1))
+            button2.clicked.connect(self.delete)
+
+
             item_layout = QHBoxLayout()
             item_layout.addStretch()
             item_layout.addWidget(button)
+            item_layout.addWidget(button2)
 
             item_widget.setLayout(item_layout)
             self.listWidget.addItem(item)
@@ -120,6 +146,13 @@ class MainWindow(QMainWindow):
 
         self.validation_window.show()
         self.display_instructions()
+
+    def delete( self ):
+        instruction_id = int(self.sender().objectName())
+        self.instruction_manager.confirmation( instruction_id )
+        self.display_instructions()
+
+
 
     def log_in(self, username: str, is_admin: bool) -> None:
         self.username = username
