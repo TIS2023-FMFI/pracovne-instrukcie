@@ -14,7 +14,7 @@ class History:
         self.database.execute_query(f"INSERT INTO history (username, instruction_name) "
                                     f"VALUES ('{user_id}', '{name_of_instruction}')")
 
-    def get_user_history(self, user_id: str) -> List[str]:
+    def get_user_history(self, user_id: str) -> list[str]:
         return [
             instruction[0]
             for instruction in self.database.execute_query(f"SELECT instruction_name FROM history "
