@@ -93,11 +93,10 @@ class MainWindow(QMainWindow):
 
         # Add instruction
         self.instruction_manager = InstructionManager()
-        self.add_instruction_button.clicked.connect(self.instruction_manager.show)
+        self.add_instruction_button.clicked.connect(self.add)
 
         # Database
         self.database = DBManager()
-        print( self.database.execute_query( "select * from instructions"))
 
         
 
@@ -145,14 +144,19 @@ class MainWindow(QMainWindow):
         )
 
         self.validation_window.show()
+        #TODO refresh instructions. has to refresh after clicking validate
         self.display_instructions()
 
     def delete( self ):
         instruction_id = int(self.sender().objectName())
         self.instruction_manager.confirmation( instruction_id )
+        #TODO refresh instructions. has to refresh after clicking delete
         self.display_instructions()
 
 
+    def add( self ):
+        self.instruction_manager.hide()
+        self.instruction_manager.show()
 
     def log_in(self, username: str, is_admin: bool) -> None:
         self.username = username
