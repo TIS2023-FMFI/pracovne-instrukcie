@@ -40,9 +40,12 @@ class InstructionManager( QWidget ):
         self.signal.emit()
 
 
-    def display_window( self ):
+    def display_window( self ) -> None:
         self.hide()
         self.show()
+    def close_window( self ) -> None:
+        self.clear_form()
+        self.close()
         
     def add_instruction( self ) -> None:
         name: str = self.instruction_name.text()
@@ -58,7 +61,14 @@ class InstructionManager( QWidget ):
         values('{name}','{path}','{validation_date}','{expiration_date.date()}')"
         self.database.execute_query( query )
         self.signal.emit()
-        self.hide()
+        self.clear_form()
+        self.close()
+
+    def clear_form( self ) -> None:
+        self.validation_date.setDate( QDate.currentDate() )
+        self.instruction_name.setText( "" )
+        self.path_label.setText( "" )
+        self.frequency_combobox.setCurrentText( "1" )
 
 
     def confirmation( self, instruction_id ) -> None:
