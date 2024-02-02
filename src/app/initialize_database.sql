@@ -106,9 +106,9 @@ VALUES ('PLNR 02.06 Blokovanie dielov', '../../resources/pdf/PLNR 02.06 Blokovan
 ---------------------------------------- VALIDATIONS ----------------------------------------
 CREATE TABLE IF NOT EXISTS validations
 (
-    id   INTEGER PRIMARY KEY AUTOINCREMENT,
-    name VARCHAR,
-    date DATE DEFAULT CURRENT_DATE
+    id             INTEGER PRIMARY KEY AUTOINCREMENT,
+    instruction_id INTEGER,
+    date           DATE DEFAULT CURRENT_DATE
 );
 
 
@@ -117,5 +117,5 @@ CREATE TABLE IF NOT EXISTS history
 (
     id             INTEGER PRIMARY KEY AUTOINCREMENT,
     username       VARCHAR,
-    instruction_id VARCHAR
+    instruction_id INTEGER
 );

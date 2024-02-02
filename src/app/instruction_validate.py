@@ -37,10 +37,10 @@ class InstructionValidate(QWidget):
         file_name = path.split("/")[-1]
         self.path_label.setText(file_name)
 
-    def set_file(self, id, name, path) -> None:
+    def set_file(self, _id, name, path) -> None:
         self.file_path: str = path
         self.file_name: str = name
-        self.id: int = id
+        self.id: int = _id
         self.instruction_name.setText(name)
 
     def close_validation(self):
@@ -53,15 +53,15 @@ class InstructionValidate(QWidget):
         today = datetime.datetime.today()
         expiration = today + relativedelta(months=+frequency)
         expiration_date = expiration.date()
+
         update_query = f"UPDATE instructions SET "
-
         if new_instruction:
-            update_query += f"file_path='{new_instruction}',"
+            update_query += f"file_path='{new_instruction}', "
 
-        update_query += f"validation_date=CURRENT_DATE, expiration_date='{expiration_date}' WHERE id={self.id};"
+        update_query += f"validation_date=CURRENT_DATE, expiration_date='{expiration_date}' WHERE id={self.id}"
         self.database.execute_query(update_query)
-        self.database.execute_query(f"Insert into validations (name) values('{self.file_name}')")
+        self.database.execute_query(f"INSERT INTO validations (instruction_id) VALUES ('{self.id}')")
 
-        print(self.database.execute_query(f"select * from instructions where id = {self.id}"))
+        print(self.database.execute_query(f"SELECT * FROM instructions WHERE id = {self.id}"))
         self.signal.emit()
         self.close_validation()
