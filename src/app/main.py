@@ -7,17 +7,20 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QDialog, QApplication, QWidget, QMainWindow, QHBoxLayout, QLabel, QPushButton, \
     QToolButton, QSpacerItem, QListWidgetItem, QMessageBox
 
-import employees
+from constants import INSTRUCTIONS_DIR
 
+from database_manager import DBManager
+
+import employees
+from add_employee import AddEmployee
+from user_history import History
+
+from keyword_search import Search
 from instruction_viewer import InstructionViewer
 from instruction_validate import InstructionValidate
 from histogram import Histogram
-from keyword_search import Search
 from instruction_add import InstructionAdd
 from instruction_delete import InstructionDelete
-from database_manager import DBManager
-from user_history import History
-from add_employee import AddEmployee
 
 
 class LoginWindow(QDialog):
@@ -52,6 +55,9 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__()
         loadUi('ui/main_window.ui', self)
 
+        # Database
+        self.database: DBManager = DBManager()
+
         # User
         self.username: str = ''
         self.is_admin: bool = False
@@ -64,33 +70,29 @@ class MainWindow(QMainWindow):
         self.add_employee_button.clicked.connect(self.add_employee.show_window)
 
         # Instructions
-        self.instructions_dir: str = '../../resources/pdf/'
         # TODO: replace with DB query
         self.instructions: dict[int, str] = {
-            i: self.instructions_dir + instruction
-            for i, instruction in enumerate(os.listdir(self.instructions_dir))
+            i: INSTRUCTIONS_DIR + instruction
+            for i, instruction in enumerate(os.listdir(INSTRUCTIONS_DIR))
             if instruction.endswith('.pdf')
         }
         self.instruction_names: list[str] = [
             instruction.removesuffix('.pdf')
-            for instruction in os.listdir(self.instructions_dir)
+            for instruction in os.listdir(INSTRUCTIONS_DIR)
             if instruction.endswith('.pdf')
         ]
 
         # Search Instructions
-        self.search_engine: Search = Search(self.instructions_dir)
+        self.search_engine: Search = Search()
         self.search_input.textChanged.connect(self.display_instructions)
 
-        # Database
-        self.database = DBManager()
-
         # View Instructions
-        self.pdf_viewer: InstructionViewer = InstructionViewer(self)
+        self.pdf_viewer: InstructionViewer = InstructionViewer()
         self.listWidget.itemClicked.connect(lambda item: self.open_instruction(item.text()))
         self.display_instructions()
 
         # Validate Instructions
-        self.validation_window: InstructionValidate = InstructionValidate(self.instructions_dir)
+        self.validation_window: InstructionValidate = InstructionValidate()
         self.validation_window.signal.connect(self.display_instructions)
 
         # Histogram
@@ -161,7 +163,7 @@ class MainWindow(QMainWindow):
     def open_instruction(self, file_name: str) -> None:
         # TODO: replace with db query
         name: str = file_name
-        path = self.instructions_dir + file_name + '.pdf'
+        path = INSTRUCTIONS_DIR + file_name + '.pdf'
         self.pdf_viewer.set_document(path, name)
         self.pdf_viewer.display()
         self.history.log_open_instruction(self.username, name)

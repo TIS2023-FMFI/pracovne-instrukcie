@@ -4,6 +4,8 @@ from PyQt5.QtWidgets import QWidget
 
 from csv import writer
 
+from constants import EMPLOYEES_PATH
+
 
 class AddEmployee(QWidget):
     def __init__(self) -> None:
@@ -29,7 +31,7 @@ class AddEmployee(QWidget):
         else:
             self.hide()
 
-            with open(self.employees_file_path, 'a', newline='', encoding='utf-8') as file:
+            with open(EMPLOYEES_PATH, 'a', newline='', encoding='utf-8') as file:
                 writer_object = writer(file)
                 writer_object.writerow(form_names)
                 file.close()

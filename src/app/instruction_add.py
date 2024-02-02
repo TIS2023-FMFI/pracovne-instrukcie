@@ -11,6 +11,8 @@ from dateutil.relativedelta import relativedelta
 from instruction_delete import InstructionDelete
 from database_manager import DBManager
 
+from constants import INSTRUCTIONS_DIR
+
 
 class InstructionAdd(QWidget):
     signal: pyqtSignal = pyqtSignal()
@@ -20,8 +22,6 @@ class InstructionAdd(QWidget):
         loadUi('ui/add_instruction.ui', self)
         self.setStyleSheet(open('ui/instruction_manager.css').read())
         self.setWindowFlag(Qt.FramelessWindowHint)
-
-        self.pdf_path: str = '../../resources/pdf/'
 
         self.close_button.clicked.connect(self.close)
         self.database: DBManager = DBManager()
@@ -35,7 +35,7 @@ class InstructionAdd(QWidget):
         self.selectedFilePath: str = ''
 
     def select_file(self) -> None:
-        path, _ = QFileDialog.getOpenFileName(self, 'Select file', self.pdf_path, 'PDF files (*.pdf)')
+        path, _ = QFileDialog.getOpenFileName(self, 'Select file', INSTRUCTIONS_DIR, 'PDF files (*.pdf)')
         self.selectedFilePath = path
         self.path_label.setText(path.split('/')[-1])
 
@@ -70,7 +70,7 @@ class InstructionAdd(QWidget):
             return
 
         query = (f"INSERT INTO instructions (name, file_path, validation_date, expiration_date) "
-                 f"VALUES ('{name}', '{self.pdf_path + path}', '{validation_date}', '{expiration_date.date()}') ")
+                 f"VALUES ('{name}', '{INSTRUCTIONS_DIR + path}', '{validation_date}', '{expiration_date.date()}') ")
 
         self.database.execute_query(query)
 

@@ -2,16 +2,17 @@ import PyPDF2
 import os
 from unidecode import unidecode
 
+from constants import INSTRUCTIONS_DIR
+
 
 class Search:
-    def __init__(self, directory_path: str) -> None:
-        self.instructions_dir = directory_path
+    def __init__(self) -> None:
         self.words_in_pdf: dict[str, set[str]] = dict()
         # TODO: read PDFs at startup
         # self.preread_pdfs()
 
     def preread_pdfs(self) -> None:
-        for instruction in os.listdir(self.instructions_dir):
+        for instruction in os.listdir(INSTRUCTIONS_DIR):
             if instruction.endswith('.pdf'):
                 self.read_pdf(instruction)
 
@@ -20,7 +21,7 @@ class Search:
         for word in instruction.split():
             set_of_words.add(unidecode(word.lower()))
 
-        pdfFileObj = open(self.instructions_dir + instruction, 'rb')
+        pdfFileObj = open(INSTRUCTIONS_DIR + instruction, 'rb')
         pdfReader = PyPDF2.PdfReader(pdfFileObj)
         for i in range(len(pdfReader.pages)):
             pageObj = pdfReader.pages[i]
@@ -48,7 +49,7 @@ class Search:
     def filter_instructions(self, keyword: str = '', user_history: tuple[str] = ()) -> list[str]:
         instructions: list[str] = [
             instruction.removesuffix('.pdf')
-            for instruction in os.listdir(self.instructions_dir)
+            for instruction in os.listdir(INSTRUCTIONS_DIR)
             if instruction.endswith('.pdf') and self.contains_keyword(instruction, unidecode(keyword.lower()))
         ]
 

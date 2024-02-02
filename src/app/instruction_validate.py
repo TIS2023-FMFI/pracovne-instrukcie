@@ -8,11 +8,13 @@ from dateutil.relativedelta import relativedelta
 from database_manager import DBManager
 from PyQt5.QtCore import pyqtSignal
 
+from constants import INSTRUCTIONS_DIR
+
 
 class InstructionValidate(QWidget):
     signal: pyqtSignal = pyqtSignal()
 
-    def __init__(self, instructions_dir) -> None:
+    def __init__(self) -> None:
         QWidget.__init__(self)
         loadUi("ui/validation.ui", self)
         self.setStyleSheet(open('ui/validation.css').read())
@@ -24,7 +26,6 @@ class InstructionValidate(QWidget):
 
         self.frequency_combobox.addItems([str(i) for i in range(1, 13)])
 
-        self.instructions_dir: str = instructions_dir
         self.database = DBManager()
 
         self.file_path: str = ''
@@ -32,7 +33,7 @@ class InstructionValidate(QWidget):
         self.id: int = 0
 
     def select_file(self) -> None:
-        path, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Select file", "../../resources/pdf", "PDF files (*.pdf)")
+        path, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Select file", INSTRUCTIONS_DIR, "PDF files (*.pdf)")
         file_name = path.split("/")[-1]
         self.path_label.setText(file_name)
 
