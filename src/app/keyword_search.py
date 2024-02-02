@@ -3,6 +3,7 @@ import os
 from unidecode import unidecode
 
 from constants import INSTRUCTIONS_DIR
+from instruction import Instruction
 
 
 class Search:
@@ -14,14 +15,14 @@ class Search:
     def preread_pdfs(self) -> None:
         for instruction in os.listdir(INSTRUCTIONS_DIR):
             if instruction.endswith('.pdf'):
-                self.read_pdf(instruction)
+                self.read_pdf(instruction.removesuffix('.pdf'))
 
     def read_pdf(self, instruction: str) -> None:
         set_of_words: set[str] = set()
         for word in instruction.split():
             set_of_words.add(unidecode(word.lower()))
 
-        pdfFileObj = open(INSTRUCTIONS_DIR + instruction, 'rb')
+        pdfFileObj = open(INSTRUCTIONS_DIR + instruction + '.pdf', 'rb')
         pdfReader = PyPDF2.PdfReader(pdfFileObj)
         for i in range(len(pdfReader.pages)):
             pageObj = pdfReader.pages[i]
@@ -46,17 +47,18 @@ class Search:
 
         return False
 
-    def filter_instructions(self, keyword: str = '', user_history: tuple[str] = ()) -> list[str]:
-        instructions: list[str] = [
-            instruction.removesuffix('.pdf')
-            for instruction in os.listdir(INSTRUCTIONS_DIR)
-            if instruction.endswith('.pdf') and self.contains_keyword(instruction, unidecode(keyword.lower()))
-        ]
+    def filter_instructions(self, keyword: str, history: tuple[int], all_instructions: list[Instruction]) -> list[Instruction]:
+        instructions: list[Instruction] = list()
+        for _id in all_instructions:
+            if self.contains_keyword(_id.name, unidecode(keyword.lower())):
+                instructions.append(_id)
 
-        output: list[str] = []
-        for instruction in user_history:
-            if instruction in instructions:
-                output.append(instruction)
-                instructions.remove(instruction)
+        instruction_ids: dict[int, Instruction] = {instr.id: instr for instr in instructions}
+        output: list[Instruction] = list()
+        for _id in history:
+            if _id in instruction_ids.keys():
+                output.append(instruction_ids[_id])
+                instructions.remove(instruction_ids[_id])
+                del instruction_ids[_id]
 
         return output + instructions

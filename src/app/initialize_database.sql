@@ -123,5 +123,5 @@ CREATE TABLE IF NOT EXISTS history
 (
     id               INTEGER PRIMARY KEY AUTOINCREMENT,
     username         VARCHAR,
-    instruction_name VARCHAR
+    instruction_id VARCHAR
 );
