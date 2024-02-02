@@ -7,6 +7,7 @@ from instruction import Instruction
 
 from database_manager import DBManager
 
+
 class Search:
     def __init__(self) -> None:
         self.words_in_pdf: dict[str, set[str]] = dict()
@@ -15,7 +16,8 @@ class Search:
         self.preread_pdfs()
 
     def preread_pdfs(self) -> None:
-        instructions_list_path = [instr[0] for instr in self.database.execute_query(f"SELECT file_path FROM instructions")]
+        instructions_list_path = [instr[0] for instr in
+                                  self.database.execute_query(f"SELECT file_path FROM instructions")]
         for instruction_path in instructions_list_path:
             if instruction_path.endswith('.pdf') and os.path.exists(instruction_path):
                 self.read_pdf(instruction_path)
@@ -50,7 +52,8 @@ class Search:
 
         return False
 
-    def filter_instructions(self, keyword: str, history: tuple[int], all_instructions: list[Instruction]) -> list[Instruction]:
+    def filter_instructions(self, keyword: str, history: tuple[int], all_instructions: list[Instruction]) -> list[
+        Instruction]:
         instructions: list[Instruction] = list()
         for _id in all_instructions:
             if self.contains_keyword(_id.file_path, unidecode(keyword.lower())):
