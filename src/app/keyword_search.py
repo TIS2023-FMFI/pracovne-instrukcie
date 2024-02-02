@@ -7,6 +7,7 @@ class Search:
     def __init__(self, directory_path: str) -> None:
         self.instructions_dir = directory_path
         self.words_in_pdf: dict[str, set[str]] = dict()
+        # TODO: read PDFs at startup
         # self.preread_pdfs()
 
     def preread_pdfs(self) -> None:

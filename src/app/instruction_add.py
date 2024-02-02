@@ -26,9 +26,6 @@ class InstructionAdd(QWidget):
         self.close_button.clicked.connect(self.close)
         self.database: DBManager = DBManager()
 
-        # self.confirmation_window: InstructionDelete = InstructionDelete()
-        # self.confirmation_window.signal.connect(self.delete_instruction)
-
         self.select_button.clicked.connect(self.select_file)
         self.validation_date.setDate(QDate.currentDate())
         self.add_button.clicked.connect(self.add_instruction)
