@@ -41,9 +41,7 @@ class InstructionDelete(QWidget):
         self.show()
 
     def delete_instruction(self) -> None:
-        print(self.instruction_id)
-        query = f"DELETE FROM instructions WHERE id = {self.instruction_id}"
+        self.database.execute_query(f"DELETE FROM instructions WHERE id = {self.instruction_id}")
         os.remove(self.file_path)
-        self.database.execute_query(query)
         self.instruction_id = 0
         self.signal.emit()
