@@ -26,8 +26,8 @@ class InstructionAdd(QWidget):
         self.close_button.clicked.connect(self.close)
         self.database: DBManager = DBManager()
 
-        self.confirmation_window: InstructionDelete = InstructionDelete()
-        self.confirmation_window.signal.connect(self.delete_instruction)
+        # self.confirmation_window: InstructionDelete = InstructionDelete()
+        # self.confirmation_window.signal.connect(self.delete_instruction)
 
         self.select_button.clicked.connect(self.select_file)
         self.validation_date.setDate(QDate.currentDate())
@@ -41,12 +41,6 @@ class InstructionAdd(QWidget):
         path, _ = QFileDialog.getOpenFileName(self, 'Select file', self.pdf_path, 'PDF files (*.pdf)')
         self.selectedFilePath = path
         self.path_label.setText(path.split('/')[-1])
-
-    def delete_instruction(self) -> None:
-        query = f"DELETE FROM instructions WHERE id = {self.instruction_id}"
-        self.database.execute_query(query)
-        self.instruction_id = None
-        self.signal.emit()
 
     def display_window(self) -> None:
         self.hide()
@@ -92,11 +86,3 @@ class InstructionAdd(QWidget):
         self.instruction_name.setText('')
         self.path_label.setText('')
         self.frequency_combobox.setCurrentText('1')
-
-    def confirmation(self, instruction_id) -> None:
-        self.confirmation_window.hide()
-        self.instruction_id = instruction_id
-        # name = [ (name, ) ]
-        name: list[tuple] = self.database.execute_query(f"SELECT name FROM instructions WHERE id = {instruction_id}")
-        self.confirmation_window.set_title(name[0][0])
-        self.confirmation_window.show()

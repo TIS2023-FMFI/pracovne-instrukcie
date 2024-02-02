@@ -92,10 +92,14 @@ class MainWindow(QMainWindow):
         self.histogram: Histogram = Histogram()
         self.histogram_button.clicked.connect(self.histogram.plot_histogram)
 
-        # Add/Delete instruction
-        self.instruction_add = InstructionAdd()
+        # Add instruction
+        self.instruction_add: InstructionAdd = InstructionAdd()
         self.add_instruction_button.clicked.connect(self.instruction_add.display_window)
         self.instruction_add.signal.connect(self.display_instructions)
+
+        # Delete Instruction
+        self.instruction_delete: InstructionDelete = InstructionDelete()
+        self.instruction_delete.signal.connect(self.display_instructions)
 
     def display_instructions(self) -> None:
         # TODO: replace with DB query?
@@ -139,7 +143,7 @@ class MainWindow(QMainWindow):
 
     def delete(self) -> None:
         instruction_id = int(self.sender().objectName())
-        self.instruction_add.confirmation(instruction_id)
+        self.instruction_delete.confirmation(instruction_id)
 
     def log_in(self, username: str, is_admin: bool) -> None:
         self.username = username
