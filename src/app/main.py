@@ -3,7 +3,7 @@ import os
 
 from PyQt5 import QtGui
 from PyQt5.uic import loadUi
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QDate
 from PyQt5.QtWidgets import QDialog, QApplication, QWidget, QMainWindow, QHBoxLayout, QLabel, QPushButton, \
     QToolButton, QSpacerItem, QListWidgetItem, QMessageBox
 
@@ -53,6 +53,7 @@ class MainWindow(QMainWindow):
     def __init__(self) -> None:
         self.login_window: QDialog = LoginWindow(self)
         self.login_window.showFullScreen()
+
         super(MainWindow, self).__init__()
         loadUi('ui/main_window.ui', self)
 
@@ -135,6 +136,7 @@ class MainWindow(QMainWindow):
             item_widget.setObjectName('button_placeholder')
 
             button = QPushButton('Validovať')
+            button.setStyleSheet("QPushButton{ background-color: green;}")
             button.setProperty('Instruction', instruction)
             button.clicked.connect(self.validate_instruction)
 
@@ -143,12 +145,19 @@ class MainWindow(QMainWindow):
             button2.setProperty('Instruction', instruction)
             button2.clicked.connect(self.delete)
 
+            today = QDate.currentDate()
+            expiration = QDate.fromString(instruction.expiration_date, "yyyy-MM-dd")
+
+            validation = QLabel('Time left')
+            validation.setText(str(today.daysTo(expiration)) + ' D')
+
             item_layout = QHBoxLayout()
             item_layout.addStretch()
+            item_layout.addWidget(validation)
             item_layout.addWidget(button)
             item_layout.addWidget(button2)
-
             item_widget.setLayout(item_layout)
+
             self.listWidget.addItem(item)
             self.listWidget.setItemWidget(item, item_widget)
 
