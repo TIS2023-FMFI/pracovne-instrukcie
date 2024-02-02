@@ -12,8 +12,8 @@ from constants import INSTRUCTIONS_DIR
 from database_manager import DBManager
 
 import employees
-from add_employee import AddEmployee
-from user_history import History
+from employee_add import AddEmployee
+from employee_history import History
 
 from instruction import Instruction, initialize_instructions
 from keyword_search import Search
@@ -176,6 +176,7 @@ class MainWindow(QMainWindow):
     def reload_instruction(self):
         self.instructions_DB: list[Instruction] = initialize_instructions()
         self.display_instructions()
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
