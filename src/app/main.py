@@ -71,19 +71,7 @@ class MainWindow(QMainWindow):
         self.add_employee_button.clicked.connect(self.add_employee.show_window)
 
         # Instructions
-        # TODO: replace with DB query
         self.instructions_DB: list[Instruction] = initialize_instructions()
-
-        self.instructions: dict[int, str] = {
-            i: INSTRUCTIONS_DIR + instruction
-            for i, instruction in enumerate(os.listdir(INSTRUCTIONS_DIR))
-            if instruction.endswith('.pdf')
-        }
-        self.instruction_names: list[str] = [
-            instruction.removesuffix('.pdf')
-            for instruction in os.listdir(INSTRUCTIONS_DIR)
-            if instruction.endswith('.pdf')
-        ]
 
         # Search Instructions
         self.search_engine: Search = Search()
@@ -96,7 +84,7 @@ class MainWindow(QMainWindow):
 
         # Validate Instructions
         self.instruction_validate: InstructionValidate = InstructionValidate()
-        self.instruction_validate.signal.connect(self.display_instructions)
+        self.instruction_validate.signal.connect(self.reload_instruction)
 
         # Histogram
         self.histogram: Histogram = Histogram()
@@ -105,11 +93,11 @@ class MainWindow(QMainWindow):
         # Add instruction
         self.instruction_add: InstructionAdd = InstructionAdd()
         self.add_instruction_button.clicked.connect(self.instruction_add.display_window)
-        self.instruction_add.signal.connect(self.display_instructions)
+        self.instruction_add.signal.connect(self.reload_instruction)
 
         # Delete Instruction
         self.instruction_delete: InstructionDelete = InstructionDelete()
-        self.instruction_delete.signal.connect(self.display_instructions)
+        self.instruction_delete.signal.connect(self.reload_instruction)
 
     def log_in_user(self, username: str, is_admin: bool) -> None:
         self.username = username
@@ -135,7 +123,6 @@ class MainWindow(QMainWindow):
         self.hide()
 
     def display_instructions(self) -> None:
-        # TODO: replace with DB query?
         filtered_instructions: list[Instruction] = self.search_engine.filter_instructions(self.search_input.text(),
                                                                                           tuple(self.user_history),
                                                                                           self.instructions_DB)
@@ -186,6 +173,9 @@ class MainWindow(QMainWindow):
         instruction_id: int = self.sender().property('Instruction').id
         self.instruction_delete.confirmation(instruction_id)
 
+    def reload_instruction(self):
+        self.instructions_DB: list[Instruction] = initialize_instructions()
+        self.display_instructions()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

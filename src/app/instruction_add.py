@@ -61,7 +61,7 @@ class InstructionAdd(QWidget):
 
         if self.selectedFilePath:
             try:
-                shutil.copy2(self.selectedFilePath, '../../resources/pdf')
+                shutil.copy2(self.selectedFilePath, INSTRUCTIONS_DIR)
 
             except Exception as e:
                 print(f"Error copying file: {e}")

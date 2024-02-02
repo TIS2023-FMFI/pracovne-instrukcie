@@ -1,7 +1,10 @@
+import sys
+import os
+import shutil
+
 from PyQt5 import QtCore
-from PyQt5 import QtWidgets
 from PyQt5.uic import loadUi
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QWidget, QFileDialog
 
 import datetime
 from dateutil.relativedelta import relativedelta
@@ -28,14 +31,15 @@ class InstructionValidate(QWidget):
 
         self.database = DBManager()
 
+        self.selectedFilePath: str = ''
         self.file_path: str = ''
         self.file_name: str = ''
         self.id: int = 0
 
     def select_file(self) -> None:
-        path, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Select file", INSTRUCTIONS_DIR, "PDF files (*.pdf)")
-        file_name = path.split("/")[-1]
-        self.path_label.setText(file_name)
+        path, _ = QFileDialog.getOpenFileName(self, "Select file", INSTRUCTIONS_DIR, "PDF files (*.pdf)")
+        self.selectedFilePath = path
+        self.path_label.setText(path.split("/")[-1])
 
     def set_file(self, _id, name, path) -> None:
         self.file_path: str = path
@@ -53,10 +57,21 @@ class InstructionValidate(QWidget):
         today = datetime.datetime.today()
         expiration = today + relativedelta(months=+frequency)
         expiration_date = expiration.date()
-
         update_query = f"UPDATE instructions SET "
+
         if new_instruction:
-            update_query += f"file_path='{new_instruction}', "
+            update_query += f"file_path='{INSTRUCTIONS_DIR + new_instruction}', "
+            if self.selectedFilePath:
+                try:
+                    shutil.copy2(self.selectedFilePath, INSTRUCTIONS_DIR)
+                    os.remove(self.file_path)
+
+                except Exception as e:
+                    print(f"Error copying/removing file: {e}")
+
+            else:
+                print('error')
+                return
 
         update_query += f"validation_date=CURRENT_DATE, expiration_date='{expiration_date}' WHERE id={self.id}"
         self.database.execute_query(update_query)

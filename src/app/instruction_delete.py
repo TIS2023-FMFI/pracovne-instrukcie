@@ -1,3 +1,5 @@
+import os
+
 from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtCore import Qt, pyqtSignal
@@ -15,6 +17,7 @@ class InstructionDelete(QWidget):
         self.setStyleSheet(open('ui/confirmation_window.css').read())
 
         self.database: DBManager = DBManager()
+        self.file_path = None
 
         self.accept_button.clicked.connect(self.confirm)
         self.reject_button.clicked.connect(self.close)
@@ -22,6 +25,7 @@ class InstructionDelete(QWidget):
         self.instruction_id: int = 0
 
     def confirm(self) -> None:
+        self.delete_instruction()
         self.signal.emit()
         self.close()
 
@@ -32,13 +36,14 @@ class InstructionDelete(QWidget):
     def confirmation(self, instruction_id) -> None:
         self.hide()
         self.instruction_id = instruction_id
-        # name = [ (name, ) ]
-        name: list[tuple] = self.database.execute_query(f"SELECT name FROM instructions WHERE id = {instruction_id}")
-        self.set_title(name[0][0])
+        title, self.file_path = self.database.execute_query(f"SELECT name, file_path FROM instructions WHERE id = {instruction_id}")[0]
+        self.set_title(title)
         self.show()
 
     def delete_instruction(self) -> None:
+        print(self.instruction_id)
         query = f"DELETE FROM instructions WHERE id = {self.instruction_id}"
+        os.remove(self.file_path)
         self.database.execute_query(query)
         self.instruction_id = 0
         self.signal.emit()
