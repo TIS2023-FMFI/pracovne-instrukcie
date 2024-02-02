@@ -1,3 +1,4 @@
+import os
 from database_manager import DBManager
 
 
@@ -15,7 +16,9 @@ def initialize_instructions() -> list[Instruction]:
     out: list[Instruction] = list()
 
     instruction_list: list[tuple] = database.execute_query(f"SELECT * FROM instructions")
-    for instruction in instruction_list:
-        out.append(Instruction(*instruction))
+    for instruction_parameters in instruction_list:
+        instruction = Instruction(*instruction_parameters)
+        if os.path.exists(instruction.file_path):
+            out.append(instruction)
 
     return out
