@@ -113,9 +113,9 @@
                             </layout>
                         </item>
                         <item>
-                            <widget class="QPushButton" name="pushButton_3">
+                            <widget class="QPushButton" name="add_employee_button">
                                 <property name="text">
-                                    <string>PushButton</string>
+                                    <string>Add Employee</string>
                                 </property>
                             </widget>
                         </item>

@@ -27,4 +27,4 @@ class DBManager:
 
 if __name__ == '__main__':
     db = DBManager()
-    db.run_script('create_script.sql')
+    db.run_script('initialize_database.sql')

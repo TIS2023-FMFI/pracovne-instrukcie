@@ -1,14 +1,11 @@
 import sys
 import os
 
-from PyQt5.uic import loadUi
-from PyQt5.QtWidgets import QDialog, QApplication, QMainWindow, QListWidgetItem
-from PyQt5.QtCore import Qt
 from PyQt5 import QtGui
-from PyQt5 import QtWidgets
-
+from PyQt5.uic import loadUi
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QDialog, QApplication, QWidget, QMainWindow, QHBoxLayout, QLabel, QPushButton, \
-    QToolButton, QSpacerItem
+    QToolButton, QSpacerItem, QListWidgetItem, QMessageBox
 
 import employees
 
@@ -19,6 +16,8 @@ from keyword_search import Search
 from instruction_add import InstructionAdd
 from instruction_delete import InstructionDelete
 from database_manager import DBManager
+from user_history import History
+from add_employee import AddEmployee
 
 
 class LoginWindow(QDialog):
@@ -40,7 +39,7 @@ class LoginWindow(QDialog):
 
         if username is not None:
             self.login_input.setText('')
-            self.main_window.log_in(username, isAdmin)
+            self.main_window.log_in_user(username, isAdmin)
 
             self.main_window.showFullScreen()
             self.hide()
@@ -56,7 +55,13 @@ class MainWindow(QMainWindow):
         # User
         self.username: str = ''
         self.is_admin: bool = False
-        self.logout_button.clicked.connect(self.log_out)
+        self.history: History = History()
+        self.user_history: list[str] = []
+        self.logout_button.clicked.connect(self.log_out_user)
+
+        # Add new Employee
+        self.add_employee: AddEmployee = AddEmployee()
+        self.add_employee_button.clicked.connect(self.add_employee.show_window)
 
         # Instructions
         self.instructions_dir: str = '../../resources/pdf/'
@@ -81,7 +86,7 @@ class MainWindow(QMainWindow):
 
         # View Instructions
         self.pdf_viewer: InstructionViewer = InstructionViewer(self)
-        self.listWidget.itemClicked.connect(self.clicked)
+        self.listWidget.itemClicked.connect(lambda item: self.open_instruction(item.text()))
         self.display_instructions()
 
         # Validate Instructions
@@ -101,10 +106,34 @@ class MainWindow(QMainWindow):
         self.instruction_delete: InstructionDelete = InstructionDelete()
         self.instruction_delete.signal.connect(self.display_instructions)
 
+    def log_in_user(self, username: str, is_admin: bool) -> None:
+        self.username = username
+        self.is_admin = is_admin
+        self.username_label.setText(username)
+
+        self.user_history = self.history.get_user_history(self.username)
+        self.display_instructions()
+
+    def log_out_user(self) -> None:
+        self.username_label.setText('')
+        self.search_input.setText('')
+
+        self.pdf_viewer.hide()
+        self.validation_window.hide()
+        self.histogram.hide()
+        self.instruction_add.hide()
+        self.instruction_delete.hide()
+
+        self.display_instructions()
+
+        self.login_window.showFullScreen()
+        self.hide()
+
     def display_instructions(self) -> None:
         # TODO: replace with DB query?
-        instruction_names: list[str] = self.search_engine.filter_instructions(self.search_input.text())
-        # instruction_names = self.database.execute_query(f"select id, name from instructions")
+        instruction_names: list[str] = self.search_engine.filter_instructions(self.search_input.text(),
+                                                                              tuple(self.user_history))
+
         self.listWidget.clear()
         for i, name in enumerate(instruction_names):
             item = QListWidgetItem(name)
@@ -113,7 +142,7 @@ class MainWindow(QMainWindow):
 
             button = QPushButton('Validovať')
             button.setObjectName(str(i + 1))
-            button.clicked.connect(self.validate)
+            button.clicked.connect(self.validate_instruction)
 
             button2 = QPushButton("Vymazať")
             button2.setStyleSheet("QPushButton{ background-color: red;}")
@@ -129,7 +158,15 @@ class MainWindow(QMainWindow):
             self.listWidget.addItem(item)
             self.listWidget.setItemWidget(item, item_widget)
 
-    def validate(self) -> None:
+    def open_instruction(self, file_name: str) -> None:
+        # TODO: replace with db query
+        name: str = file_name
+        path = self.instructions_dir + file_name + '.pdf'
+        self.pdf_viewer.set_document(path, name)
+        self.pdf_viewer.display()
+        self.history.log_open_instruction(self.username, name)
+
+    def validate_instruction(self):
         self.validation_window.hide()
         validation_id = int(self.sender().objectName())
 
@@ -144,34 +181,6 @@ class MainWindow(QMainWindow):
     def delete(self) -> None:
         instruction_id = int(self.sender().objectName())
         self.instruction_delete.confirmation(instruction_id)
-
-    def log_in(self, username: str, is_admin: bool) -> None:
-        self.username = username
-        self.is_admin = is_admin
-        self.username_label.setText(username)
-
-    def log_out(self) -> None:
-        self.username_label.setText('')
-        self.search_input.setText('')
-        self.pdf_viewer.hide()
-        self.validation_window.hide()
-        self.histogram.hide()
-        self.instruction_add.hide()
-
-        self.display_instructions()
-
-        self.login_window.showFullScreen()
-        self.hide()
-
-    def clicked(self, item: str) -> None:
-        self.open_instruction(item.text())
-
-    def open_instruction(self, file_name: str) -> None:
-        # TODO: replace with db query
-        name: str = file_name
-        path = self.instructions_dir + file_name + '.pdf'
-        self.pdf_viewer.set_document(path, name)
-        self.pdf_viewer.display()
 
 
 if __name__ == '__main__':
