@@ -8,11 +8,11 @@ from PyQt5.QtWidgets import QWidget, QFileDialog
 import datetime
 from dateutil.relativedelta import relativedelta
 
-from confirmation_window import ConfirmationWindow
+from instruction_delete import InstructionDelete
 from database_manager import DBManager
 
 
-class InstructionManager(QWidget):
+class InstructionAdd(QWidget):
     signal: pyqtSignal = pyqtSignal()
 
     def __init__(self) -> None:
@@ -26,7 +26,7 @@ class InstructionManager(QWidget):
         self.close_button.clicked.connect(self.close)
         self.database: DBManager = DBManager()
 
-        self.confirmation_window: ConfirmationWindow = ConfirmationWindow()
+        self.confirmation_window: InstructionDelete = InstructionDelete()
         self.confirmation_window.signal.connect(self.delete_instruction)
 
         self.select_button.clicked.connect(self.select_file)

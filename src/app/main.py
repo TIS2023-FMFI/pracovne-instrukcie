@@ -10,17 +10,16 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QDialog, QApplication, QWidget, QMainWindow, QHBoxLayout, QLabel, QPushButton, \
     QToolButton, QSpacerItem
 
-          
-
 import employees
 
-from pdf_viewer import PDFViewer
-from validation import Validation
+from instruction_viewer import InstructionViewer
+from instruction_validate import InstructionValidate
 from histogram import Histogram
 from keyword_search import Search
-from instruction_manager import InstructionManager
-from confirmation_window import ConfirmationWindow
+from instruction_add import InstructionAdd
+from instruction_delete import InstructionDelete
 from database_manager import DBManager
+
 
 class LoginWindow(QDialog):
     def __init__(self, main_window) -> None:
@@ -72,7 +71,7 @@ class MainWindow(QMainWindow):
             for instruction in os.listdir(self.instructions_dir)
             if instruction.endswith('.pdf')
         ]
-       
+
         # Search Instructions
         self.search_engine: Search = Search(self.instructions_dir)
         self.search_input.textChanged.connect(self.display_instructions)
@@ -81,12 +80,12 @@ class MainWindow(QMainWindow):
         self.database = DBManager()
 
         # View Instructions
-        self.pdf_viewer: PDFViewer = PDFViewer(self)
+        self.pdf_viewer: InstructionViewer = InstructionViewer(self)
         self.listWidget.itemClicked.connect(self.clicked)
         self.display_instructions()
 
         # Validate Instructions
-        self.validation_window: Validation = Validation(self.instructions_dir)
+        self.validation_window: InstructionValidate = InstructionValidate(self.instructions_dir)
         self.validation_window.signal.connect(self.display_instructions)
 
         # Histogram
@@ -94,14 +93,14 @@ class MainWindow(QMainWindow):
         self.histogram_button.clicked.connect(self.histogram.plot_histogram)
 
         # Add/Delete instruction
-        self.instruction_manager = InstructionManager()
-        self.add_instruction_button.clicked.connect(self.instruction_manager.display_window)
-        self.instruction_manager.signal.connect(self.display_instructions)
+        self.instruction_add = InstructionAdd()
+        self.add_instruction_button.clicked.connect(self.instruction_add.display_window)
+        self.instruction_add.signal.connect(self.display_instructions)
 
     def display_instructions(self) -> None:
         # TODO: replace with DB query?
         instruction_names: list[str] = self.search_engine.filter_instructions(self.search_input.text())
-        #instruction_names = self.database.execute_query(f"select id, name from instructions")
+        # instruction_names = self.database.execute_query(f"select id, name from instructions")
         self.listWidget.clear()
         for i, name in enumerate(instruction_names):
             item = QListWidgetItem(name)
@@ -126,7 +125,7 @@ class MainWindow(QMainWindow):
             self.listWidget.addItem(item)
             self.listWidget.setItemWidget(item, item_widget)
 
-    def validate(self):
+    def validate(self) -> None:
         self.validation_window.hide()
         validation_id = int(self.sender().objectName())
 
@@ -137,10 +136,10 @@ class MainWindow(QMainWindow):
             self.instructions[validation_id - 1]
         )
         self.validation_window.show()
-        
-    def delete( self ):
+
+    def delete(self) -> None:
         instruction_id = int(self.sender().objectName())
-        self.instruction_manager.confirmation( instruction_id )
+        self.instruction_add.confirmation(instruction_id)
 
     def log_in(self, username: str, is_admin: bool) -> None:
         self.username = username
@@ -153,7 +152,7 @@ class MainWindow(QMainWindow):
         self.pdf_viewer.hide()
         self.validation_window.hide()
         self.histogram.hide()
-        self.instruction_manager.hide()
+        self.instruction_add.hide()
 
         self.display_instructions()
 
@@ -164,7 +163,7 @@ class MainWindow(QMainWindow):
         self.open_instruction(item.text())
 
     def open_instruction(self, file_name: str) -> None:
-        #TODO: replace with db query
+        # TODO: replace with db query
         name: str = file_name
         path = self.instructions_dir + file_name + '.pdf'
         self.pdf_viewer.set_document(path, name)
