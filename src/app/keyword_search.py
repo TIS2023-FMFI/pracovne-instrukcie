@@ -42,18 +42,14 @@ class Search:
 
         self.words_in_pdf[instruction_path] = set_of_words
 
-    def contains_keyword(self, path: str, keyword: str = '') -> bool:
+    def contains_keyword(self, instruction: Instruction, keyword: str = '') -> bool:
         if keyword == '':
             return True
 
-        if path not in self.words_in_pdf:
-            name = ' '.join(
-                t[0] for t in
-                self.database.execute_query(f"SELECT name FROM instructions WHERE file_path='{path}'")
-            )
-            self.read_pdf(path, name)
+        if instruction.file_path not in self.words_in_pdf:
+            self.read_pdf(instruction.file_path, instruction.name)
 
-        for word in self.words_in_pdf[path]:
+        for word in self.words_in_pdf[instruction.file_path]:
             if word.startswith(keyword):
                 return True
 
@@ -62,16 +58,16 @@ class Search:
     def filter_instructions(self, keyword: str, history: tuple[int], all_instructions: list[Instruction]) -> list[
         Instruction]:
         instructions: list[Instruction] = list()
-        for _id in all_instructions:
-            if self.contains_keyword(_id.file_path, unidecode(keyword.lower())):
-                instructions.append(_id)
+        for instruction in all_instructions:
+            if self.contains_keyword(instruction, unidecode(keyword.lower())):
+                instructions.append(instruction)
 
         instruction_ids: dict[int, Instruction] = {instr.id: instr for instr in instructions}
         output: list[Instruction] = list()
-        for _id in history:
-            if _id in instruction_ids.keys():
-                output.append(instruction_ids[_id])
-                instructions.remove(instruction_ids[_id])
-                del instruction_ids[_id]
+        for instruction in history:
+            if instruction in instruction_ids.keys():
+                output.append(instruction_ids[instruction])
+                instructions.remove(instruction_ids[instruction])
+                del instruction_ids[instruction]
 
         return output + instructions
