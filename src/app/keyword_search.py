@@ -16,15 +16,18 @@ class Search:
         self.preread_pdfs()
 
     def preread_pdfs(self) -> None:
-        instructions_list_path = [instr[0] for instr in
-                                  self.database.execute_query(f"SELECT file_path FROM instructions")]
-        for instruction_path in instructions_list_path:
-            if instruction_path.endswith('.pdf') and os.path.exists(instruction_path):
-                self.read_pdf(instruction_path)
+        instructions_list = self.database.execute_query(f"SELECT file_path, name FROM instructions")
+        for instruction_path, name in instructions_list:
+            if instruction_path.endswith('.pdf'):
+                self.read_pdf(instruction_path, name)
 
-    def read_pdf(self, instruction_path: str) -> None:
+    def read_pdf(self, instruction_path: str, name: str) -> None:
+        if not os.path.exists(instruction_path):
+            return
+
         set_of_words: set[str] = set()
-        for word in instruction_path.split():
+        path_split = instruction_path.rsplit('/', 1)[-1].removesuffix('.pdf').split()
+        for word in path_split + name.split():
             set_of_words.add(unidecode(word.lower()))
 
         pdfFileObj = open(instruction_path, 'rb')
@@ -44,7 +47,11 @@ class Search:
             return True
 
         if path not in self.words_in_pdf:
-            self.read_pdf(path)
+            name = ' '.join(
+                t[0] for t in
+                self.database.execute_query(f"SELECT name FROM instructions WHERE file_path='{path}'")
+            )
+            self.read_pdf(path, name)
 
         for word in self.words_in_pdf[path]:
             if word.startswith(keyword):
