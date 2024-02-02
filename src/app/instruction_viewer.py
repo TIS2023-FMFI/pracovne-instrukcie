@@ -15,7 +15,7 @@ def get_screen_resolution() -> tuple[int, int]:
             int(config.get('Preferences', 'HEIGHT')))
 
 
-class PDFViewer(QWidget):
+class InstructionViewer(QWidget):
     def __init__(self, parent, pdf_path=None, name=None) -> None:
         QWidget.__init__(self)
         loadUi('ui/pdf.ui', self)

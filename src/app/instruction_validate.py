@@ -5,11 +5,13 @@ from PyQt5.QtWidgets import QWidget
 
 import datetime
 from dateutil.relativedelta import relativedelta
-
 from database_manager import DBManager
+from PyQt5.QtCore import pyqtSignal
 
 
-class Validation(QWidget):
+class InstructionValidate(QWidget):
+    signal: pyqtSignal = pyqtSignal()
+
     def __init__(self, instructions_dir) -> None:
         QWidget.__init__(self)
         loadUi("ui/validation.ui", self)
@@ -60,5 +62,5 @@ class Validation(QWidget):
         self.database.execute_query(f"Insert into validations (name) values('{self.file_name}')")
 
         print(self.database.execute_query(f"select * from instructions where id = {self.id}"))
-
+        self.signal.emit()
         self.close_validation()
