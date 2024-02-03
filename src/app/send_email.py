@@ -88,9 +88,11 @@ def send_email(body: str) -> bool:
 
 def create_body() -> str:
     return '\n'.join(
-        str(round(instruction[1])) + 'days' + '  ---  ' + str(instruction[0]) for instruction in
-        DBManager().execute_query(f"SELECT name, julianday(DATE(expiration_date)) - julianday(DATE('now')) "
-                                  f"FROM instructions "
-                                  f"WHERE expiration_date BETWEEN date('now') AND date('now', '+31 days') "
-                                  f"ORDER BY expiration_date ")
+        f'{instruction[1]:2.0f} days  ---  {instruction[0]}'
+        for instruction in DBManager().execute_query(
+            f"SELECT name, julianday(DATE(expiration_date)) - julianday(DATE('now')) "
+            f"FROM instructions "
+            f"WHERE expiration_date BETWEEN date('now') AND date('now', '+31 days') "
+            f"ORDER BY expiration_date "
+        )
     )
