@@ -1,11 +1,24 @@
 import configparser
 import smtplib
+import time
 
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
+from database_manager import DBManager
 
-def send_email(names_of_instructions: list[str]) -> bool:
+
+def email_sender() -> None:
+    while True:
+        body: str = create_body()
+        print(repr(body))
+        if body:
+            print(send_email(body))
+
+        time.sleep(60)
+
+
+def send_email(body: str) -> bool:
     # Read configuration from file
     config: configparser = configparser.ConfigParser()
     config.read('config.ini')
@@ -18,8 +31,8 @@ def send_email(names_of_instructions: list[str]) -> bool:
     host_port: int = int(config.get('Email', "host_port"))
 
     # Create the email message
-    subject: str = ""
-    body: str = create_body(names_of_instructions)
+    subject: str = "Instructions to Validate"
+    print(body)
 
     message: MIMEMultipart = MIMEMultipart()
     message["From"] = sender_email
@@ -41,9 +54,10 @@ def send_email(names_of_instructions: list[str]) -> bool:
     return True
 
 
-def create_body(names_of_instructions: list[str]) -> str:
-    body = ""
-    for instruction in names_of_instructions:
-        body += f'{instruction}\n'
-
-    return body
+def create_body() -> str:
+    return '\n'.join(
+        instruction[0] for instruction in
+        DBManager().execute_query(f"SELECT name "
+                                  f"FROM instructions "
+                                  f"WHERE expiration_date BETWEEN date('now') AND date('now', '+30 days') ")
+    )
