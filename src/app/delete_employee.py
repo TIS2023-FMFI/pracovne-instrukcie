@@ -2,7 +2,7 @@ from PyQt5.uic import loadUi
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget
 
-from csv import writer
+import csv
 
 
 class DeleteEmployee(QWidget):
@@ -26,7 +26,16 @@ class DeleteEmployee(QWidget):
         else:
             self.hide()
 
-            print(self.code.text())
+            code = self.code.text()
+            with open(self.employees_file_path, 'r', newline='', encoding='utf-8') as file:
+                csv_reader = csv.reader(file)
+                rows = list(csv_reader)
+
+            rows = [row for row in rows if row[0] != code]
+
+            with open(self.employees_file_path, 'w', newline='', encoding='utf-8') as file:
+                csv_writer = csv.writer(file)
+                csv_writer.writerows(rows)
 
 
     def close_window(self) -> None:
