@@ -39,10 +39,6 @@ class InstructionAdd(QWidget):
         self.selectedFilePath = path
         self.path_label.setText(path.split('/')[-1])
 
-    def display_window(self) -> None:
-        self.hide()
-        self.show()
-
     def close_window(self) -> None:
         self.clear_form()
         self.close()
