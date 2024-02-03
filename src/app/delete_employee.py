@@ -3,7 +3,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QDialog, QVBoxLayout, QLabel
 
 import csv
-
+import employees
 
 class DeleteEmployee(QWidget):
     def __init__(self) -> None:
@@ -22,28 +22,33 @@ class DeleteEmployee(QWidget):
 
     def delete_add_clicked(self) -> None:
         if self.code.text().strip() == '':
-            self.show_message()
+            self.show_message("All fields must be filled in!")
         else:
-            self.hide()
-
             code = self.code.text()
-            self.code.setText('')
-            with open(self.employees_file_path, 'r', newline='', encoding='utf-8') as file:
-                csv_reader = csv.reader(file)
-                rows = list(csv_reader)
+            exist = employees.employee_exist(code)
+            if exist:
+                self.hide()
+                self.code.setText('')
+                with open(self.employees_file_path, 'r', newline='', encoding='utf-8') as file:
+                    csv_reader = csv.reader(file)
+                    rows = list(csv_reader)
 
-            rows = [row for row in rows if row[0] != code]
+                rows = [row for row in rows if row[0] != code]
 
-            with open(self.employees_file_path, 'w', newline='', encoding='utf-8') as file:
-                csv_writer = csv.writer(file)
-                csv_writer.writerows(rows)
+                with open(self.employees_file_path, 'w', newline='', encoding='utf-8') as file:
+                    csv_writer = csv.writer(file)
+                    csv_writer.writerows(rows)
+
+                self.show_message("Employee has been removed")
+            else:
+                self.show_message("Employee with the given code does not exist")
 
 
-    def show_message(self):
+    def show_message(self, message:str) -> None:
         warning_dialog = QDialog(self)
         warning_dialog.setWindowTitle("Notice")
         warning_layout = QVBoxLayout()
-        warning_label = QLabel("All fields must be filled in!")
+        warning_label = QLabel(message)
         warning_layout.addWidget(warning_label)
         warning_dialog.setLayout(warning_layout)
         warning_dialog.exec_()

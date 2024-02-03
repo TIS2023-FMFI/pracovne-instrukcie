@@ -22,6 +22,12 @@ def get_username(code: str) -> str | None:
 
     return None
 
+def employee_exist(code:str) -> bool:
+    codes = read_file()
+    if code in codes.keys():
+        return True
+    return False
+
 
 def read_file() -> dict[str, str]:
     employees = dict()
@@ -36,3 +42,4 @@ def read_file() -> dict[str, str]:
             employees[code] = name
 
     return employees
+
