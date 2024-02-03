@@ -3,7 +3,7 @@ import os
 
 from PyQt5 import QtGui
 from PyQt5.uic import loadUi
-from PyQt5.QtCore import Qt, QDate
+from PyQt5.QtCore import Qt, QDate, QThreadPool
 from PyQt5.QtWidgets import QDialog, QApplication, QWidget, QMainWindow, QHBoxLayout, QLabel, QPushButton, \
     QToolButton, QSpacerItem, QListWidgetItem, QMessageBox
 
@@ -11,6 +11,7 @@ from constants import INSTRUCTIONS_DIR
 
 from database_manager import DBManager
 
+import send_email
 import employees
 from employee_add import AddEmployee
 from employee_delete import DeleteEmployee
@@ -58,7 +59,11 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__()
         loadUi('ui/main_window.ui', self)
 
-        # Database
+        # # Email Sender
+        # self.threadpool: QThreadPool = QThreadPool()
+        # self.threadpool.start(send_email.email_sender)
+
+        # TODO Database remove?
         self.database: DBManager = DBManager()
 
         # User
