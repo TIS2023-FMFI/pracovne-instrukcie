@@ -1,6 +1,9 @@
 import configparser
 import smtplib
 import time
+import logging
+import re
+from datetime import datetime, timedelta
 
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -9,13 +12,43 @@ from database_manager import DBManager
 
 
 def email_sender() -> None:
-    while True:
-        body: str = create_body()
-        print(repr(body))
-        if body:
-            print(send_email(body))
+    logging.basicConfig(filename='email_sender.log', level=logging.INFO, format='%(asctime)s - %(message)s',
+                        datefmt='%Y-%m-%d %H:%M:%S')
 
-        time.sleep(60)
+    while True:
+        if is_more_than_seven_days_ago(extract_time_from_log()):
+            body: str = create_body()
+            logging.info('Email was sent!')
+            if body:
+                print(str(datetime.now()) + ' - ' + 'Email was sent!' if send_email(body) else 'No email :(')
+
+        time.sleep(300)
+
+
+def extract_time_from_log(log_file_path: str = 'email_sender.log') -> str | None:
+    timestamp_pattern = r'\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}'
+
+    with open(log_file_path, 'r') as log_file:
+        last_line = None
+        for line in log_file:
+            last_line = line
+
+        if last_line:
+            timestamp_match = re.search(timestamp_pattern, last_line)
+            if timestamp_match:
+                return timestamp_match.group()
+
+        return None
+
+
+def is_more_than_seven_days_ago(log_timestamp_str: str | None) -> bool:
+    if log_timestamp_str is None:
+        return True
+
+    log_timestamp = datetime.strptime(log_timestamp_str, '%Y-%m-%d %H:%M:%S')
+    time_difference = datetime.now() - log_timestamp
+
+    return time_difference.days >= 7
 
 
 def send_email(body: str) -> bool:
@@ -27,18 +60,17 @@ def send_email(body: str) -> bool:
     sender_email: str = config.get('Email', 'sender_email')
     sender_password: str = config.get('Email', 'sender_password')
     recipient_email: str = config.get('Email', 'recipient_email')
-    host_server: str = config.get('Email', "host_server")
-    host_port: int = int(config.get('Email', "host_port"))
+    host_server: str = config.get('Email', 'host_server')
+    host_port: int = int(config.get('Email', 'host_port'))
 
     # Create the email message
-    subject: str = "Instructions to Validate"
-    print(body)
+    subject: str = 'Instructions to Validate'
 
     message: MIMEMultipart = MIMEMultipart()
-    message["From"] = sender_email
-    message["To"] = recipient_email
-    message["Subject"] = subject
-    message.attach(MIMEText(body, "plain", "utf-8"))
+    message['From'] = sender_email
+    message['To'] = recipient_email
+    message['Subject'] = subject
+    message.attach(MIMEText(body, 'plain', 'utf-8'))
 
     # Connect to the SMTP server
     with smtplib.SMTP(host_server, host_port) as server:
@@ -56,8 +88,9 @@ def send_email(body: str) -> bool:
 
 def create_body() -> str:
     return '\n'.join(
-        instruction[0] for instruction in
-        DBManager().execute_query(f"SELECT name "
+        str(round(instruction[1])) + 'days' + '  ---  ' + str(instruction[0]) for instruction in
+        DBManager().execute_query(f"SELECT name, julianday(DATE(expiration_date)) - julianday(DATE('now')) "
                                   f"FROM instructions "
-                                  f"WHERE expiration_date BETWEEN date('now') AND date('now', '+30 days') ")
+                                  f"WHERE expiration_date BETWEEN date('now') AND date('now', '+31 days') "
+                                  f"ORDER BY expiration_date ")
     )
