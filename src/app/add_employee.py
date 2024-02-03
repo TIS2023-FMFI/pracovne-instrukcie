@@ -1,6 +1,6 @@
 from PyQt5.uic import loadUi
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QWidget, QApplication, QMessageBox, QDialog, QVBoxLayout, QLabel
 
 from csv import writer
 
@@ -23,16 +23,27 @@ class AddEmployee(QWidget):
     def button_add_clicked(self) -> None:
         form_names = [self.code.text().strip(), self.last_name.text().strip(), self.first_name.text().strip()]
         if any(form == '' for form in form_names):
-            # TODO: let the user know
-            ...
+            self.show_message()
 
         else:
+            self.code.setText('')
+            self.last_name.setText('')
+            self.first_name.setText('')
             self.hide()
 
             with open(self.employees_file_path, 'a', newline='', encoding='utf-8') as file:
                 writer_object = writer(file)
                 writer_object.writerow(form_names)
                 file.close()
+
+    def show_message(self):
+        warning_dialog = QDialog(self)
+        warning_dialog.setWindowTitle("Notice")
+        warning_layout = QVBoxLayout()
+        warning_label = QLabel("All fields must be filled in!")
+        warning_layout.addWidget(warning_label)
+        warning_dialog.setLayout(warning_layout)
+        warning_dialog.exec_()
 
     def close_window(self) -> None:
         self.code.setText('')
