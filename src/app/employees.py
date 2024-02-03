@@ -1,5 +1,6 @@
 import csv
 import configparser
+from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel
 
 file_path = '../../resources/employees.csv'
 
@@ -22,10 +23,12 @@ def get_username(code: str) -> str | None:
 
     return None
 
-def employee_exist(code:str) -> bool:
+
+def employee_exist(code: str) -> bool:
     codes = read_file()
     if code in codes.keys():
         return True
+
     return False
 
 
@@ -43,3 +46,12 @@ def read_file() -> dict[str, str]:
 
     return employees
 
+
+def show_message(self, message: str) -> None:
+    warning_dialog = QDialog(self)
+    warning_dialog.setWindowTitle("Notice")
+    warning_layout = QVBoxLayout()
+    warning_label = QLabel(message)
+    warning_layout.addWidget(warning_label)
+    warning_dialog.setLayout(warning_layout)
+    warning_dialog.exec_()

@@ -1,9 +1,10 @@
 from PyQt5.uic import loadUi
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QWidget, QDialog, QVBoxLayout, QLabel
+from PyQt5.QtWidgets import QWidget
 
 import csv
 import employees
+
 
 class DeleteEmployee(QWidget):
     def __init__(self) -> None:
@@ -22,13 +23,13 @@ class DeleteEmployee(QWidget):
 
     def delete_add_clicked(self) -> None:
         if self.code.text().strip() == '':
-            self.show_message("All fields must be filled in!")
+            employees.show_message(self, 'All fields must be filled in!')
+
         else:
             code = self.code.text()
-            exist = employees.employee_exist(code)
-            if exist:
-                self.hide()
-                self.code.setText('')
+            if employees.employee_exist(code):
+                self.close_window()
+
                 with open(self.employees_file_path, 'r', newline='', encoding='utf-8') as file:
                     csv_reader = csv.reader(file)
                     rows = list(csv_reader)
@@ -39,19 +40,10 @@ class DeleteEmployee(QWidget):
                     csv_writer = csv.writer(file)
                     csv_writer.writerows(rows)
 
-                self.show_message("Employee has been removed")
+                employees.show_message(self, 'Employee has been removed')
+
             else:
-                self.show_message("Employee with the given code does not exist")
-
-
-    def show_message(self, message:str) -> None:
-        warning_dialog = QDialog(self)
-        warning_dialog.setWindowTitle("Notice")
-        warning_layout = QVBoxLayout()
-        warning_label = QLabel(message)
-        warning_layout.addWidget(warning_label)
-        warning_dialog.setLayout(warning_layout)
-        warning_dialog.exec_()
+                employees.show_message(self, 'Employee with the given code does not exist')
 
     def close_window(self) -> None:
         self.code.setText('')

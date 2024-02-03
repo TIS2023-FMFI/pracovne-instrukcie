@@ -1,6 +1,6 @@
 from PyQt5.uic import loadUi
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QWidget, QApplication, QMessageBox, QDialog, QVBoxLayout, QLabel
+from PyQt5.QtWidgets import QWidget
 
 import employees
 from csv import writer
@@ -24,34 +24,21 @@ class AddEmployee(QWidget):
     def button_add_clicked(self) -> None:
         form_names = [self.code.text().strip(), self.last_name.text().strip(), self.first_name.text().strip()]
         if any(form == '' for form in form_names):
-            self.show_message("All fields must be filled in!")
+            employees.show_message(self, 'All fields must be filled in!')
 
         else:
-            exist = employees.employee_exist(self.code.text().strip())
-            if exist:
-                self.show_message("Employee with this code already exists")
+            if employees.employee_exist(self.code.text().strip()):
+                employees.show_message(self, 'Employee with this code already exists')
+
             else:
-                self.code.setText('')
-                self.last_name.setText('')
-                self.first_name.setText('')
-                self.hide()
+                self.close_window()
 
                 with open(self.employees_file_path, 'a', newline='', encoding='utf-8') as file:
                     writer_object = writer(file)
                     writer_object.writerow(form_names)
                     file.close()
 
-                self.show_message("Employee has been added")
-
-
-    def show_message(self, message:str) -> None:
-        warning_dialog = QDialog(self)
-        warning_dialog.setWindowTitle("Notice")
-        warning_layout = QVBoxLayout()
-        warning_label = QLabel(message)
-        warning_layout.addWidget(warning_label)
-        warning_dialog.setLayout(warning_layout)
-        warning_dialog.exec_()
+                employees.show_message(self, 'Employee has been added')
 
     def close_window(self) -> None:
         self.code.setText('')
