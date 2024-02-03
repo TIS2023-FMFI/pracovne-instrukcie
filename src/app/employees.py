@@ -2,7 +2,7 @@ import csv
 import configparser
 from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel
 
-file_path = '../../resources/employees.csv'
+from constants import EMPLOYEES_PATH
 
 
 def verify_admin(code: str) -> bool:
@@ -35,7 +35,7 @@ def employee_exist(code: str) -> bool:
 def read_file() -> dict[str, str]:
     employees = dict()
 
-    with open(file_path, 'r', newline='', encoding='utf-8') as csvfile:
+    with open(EMPLOYEES_PATH, 'r', newline='', encoding='utf-8') as csvfile:
         csvreader = csv.reader(csvfile)
 
         for line in csvreader:

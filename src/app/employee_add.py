@@ -5,6 +5,8 @@ from PyQt5.QtWidgets import QWidget
 import employees
 from csv import writer
 
+from constants import EMPLOYEES_PATH
+
 
 class AddEmployee(QWidget):
     def __init__(self) -> None:
@@ -12,8 +14,6 @@ class AddEmployee(QWidget):
         self.setWindowFlag(Qt.FramelessWindowHint)
         loadUi('ui/add_employee.ui', self)
         self.setStyleSheet(open('ui/add_employee.css').read())
-
-        self.employees_file_path = '../../resources/employees.csv'
 
         self.add_button.clicked.connect(self.button_add_clicked)
         self.close_button.clicked.connect(self.close_window)
@@ -33,7 +33,7 @@ class AddEmployee(QWidget):
             else:
                 self.close_window()
 
-                with open(self.employees_file_path, 'a', newline='', encoding='utf-8') as file:
+                with open(EMPLOYEES_PATH, 'a', newline='', encoding='utf-8') as file:
                     writer_object = writer(file)
                     writer_object.writerow(form_names)
                     file.close()
