@@ -18,9 +18,6 @@ class AddEmployee(QWidget):
         self.add_button.clicked.connect(self.button_add_clicked)
         self.close_button.clicked.connect(self.close_window)
 
-    def show_window(self) -> None:
-        self.show()
-
     def button_add_clicked(self) -> None:
         form_names = [self.code.text().strip(), self.last_name.text().strip(), self.first_name.text().strip()]
         if any(form == '' for form in form_names):

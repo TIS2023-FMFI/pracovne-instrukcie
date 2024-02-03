@@ -68,14 +68,6 @@ class MainWindow(QMainWindow):
         self.user_history: list[int] = []
         self.logout_button.clicked.connect(self.log_out_user)
 
-        # Add new Employee
-        self.add_employee: AddEmployee = AddEmployee()
-        self.add_employee_button.clicked.connect(self.add_employee.show_window)
-
-        # Delete Employee
-        self.delete_employee: DeleteEmployee = DeleteEmployee()
-        self.delete_employee_button.clicked.connect(self.delete_employee.show_window)
-
         # Instructions
         self.instructions_DB: list[Instruction] = initialize_instructions()
 
@@ -88,18 +80,26 @@ class MainWindow(QMainWindow):
         self.listWidget.itemClicked.connect(lambda item: self.open_instruction(item.data(Qt.UserRole)))
         self.display_instructions()
 
-        # Validate Instructions
-        self.instruction_validate: InstructionValidate = InstructionValidate()
-        self.instruction_validate.signal.connect(self.reload_instruction)
+        # Add new Employee
+        self.add_employee: AddEmployee = AddEmployee()
+        self.add_employee_button.clicked.connect(self.add_employee.show)
 
         # Histogram
         self.histogram: Histogram = Histogram()
         self.histogram_button.clicked.connect(self.histogram.plot_histogram)
 
+        # Delete Employee
+        self.delete_employee: DeleteEmployee = DeleteEmployee()
+        self.delete_employee_button.clicked.connect(self.delete_employee.show)
+
         # Add instruction
         self.instruction_add: InstructionAdd = InstructionAdd()
-        self.add_instruction_button.clicked.connect(self.instruction_add.display_window)
+        self.add_instruction_button.clicked.connect(self.instruction_add.show)
         self.instruction_add.signal.connect(self.reload_instruction)
+
+        # Validate Instructions
+        self.instruction_validate: InstructionValidate = InstructionValidate()
+        self.instruction_validate.signal.connect(self.reload_instruction)
 
         # Delete Instruction
         self.instruction_delete: InstructionDelete = InstructionDelete()
