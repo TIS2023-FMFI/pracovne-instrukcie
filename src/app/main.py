@@ -186,7 +186,8 @@ class MainWindow(QMainWindow):
         path = INSTRUCTIONS_DIR + instruction.file_path
         self.pdf_viewer.set_document(path, instruction.name)
         self.pdf_viewer.display()
-        self.history.log_open_instruction(self.username, instruction.id)
+        if not self.is_admin:
+            self.history.log_open_instruction(self.username, instruction.id)
 
     def validate_instruction(self):
         self.instruction_validate.hide()
