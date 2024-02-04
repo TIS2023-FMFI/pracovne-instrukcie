@@ -1,3 +1,4 @@
+import os
 import sys
 import shutil
 
@@ -11,7 +12,7 @@ from dateutil.relativedelta import relativedelta
 from instruction_delete import InstructionDelete
 from database_manager import DBManager
 
-from constants import INSTRUCTIONS_DIR
+from constants import INSTRUCTIONS_DIR, show_warning
 
 
 class InstructionAdd(QWidget):
@@ -56,6 +57,10 @@ class InstructionAdd(QWidget):
         expiration_date = validation_date_converted + relativedelta(months=+frequency)
 
         if self.selectedFilePath:
+            if os.path.exists(INSTRUCTIONS_DIR + path):
+                show_warning(self, 'File with this path already exists!')
+                return
+
             try:
                 shutil.copy2(self.selectedFilePath, INSTRUCTIONS_DIR)
 
