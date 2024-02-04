@@ -1,6 +1,5 @@
 import csv
 import configparser
-from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel
 
 from constants import EMPLOYEES_PATH
 
