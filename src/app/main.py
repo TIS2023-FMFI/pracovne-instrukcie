@@ -3,7 +3,7 @@ import os
 
 from PyQt5 import QtGui
 from PyQt5.uic import loadUi
-from PyQt5.QtCore import Qt, QDate, QThreadPool
+from PyQt5.QtCore import Qt, QDate, QThreadPool, QTimer
 from PyQt5.QtWidgets import QDialog, QApplication, QWidget, QMainWindow, QHBoxLayout, QLabel, QPushButton, \
     QToolButton, QSpacerItem, QListWidgetItem, QMessageBox
 
@@ -70,33 +70,44 @@ class MainWindow(QMainWindow):
         self.user_history: list[int] = []
         self.logout_button.clicked.connect(self.log_out_user)
 
+        # Inactivity Timer
+        self.inactivity_timer = QTimer(self)
+        self.inactivity_timeout = 5 * 60 * 1000  # 5 minutes
+        self.inactivity_timer.timeout.connect(self.log_out_user)
+
         # Instructions
         self.instructions_DB: list[Instruction] = initialize_instructions()
 
         # Search Instructions
         self.search_engine: Search = Search()
         self.search_input.textChanged.connect(self.display_instructions)
+        self.search_input.textChanged.connect(self.restart_inactivity_timer)
 
         # View Instructions
         self.pdf_viewer: InstructionViewer = InstructionViewer()
         self.listWidget.itemClicked.connect(lambda item: self.open_instruction(item.data(Qt.UserRole)))
+        self.listWidget.itemClicked.connect(self.restart_inactivity_timer)
         self.display_instructions()
 
         # Add new Employee
         self.add_employee: AddEmployee = AddEmployee()
         self.add_employee_button.clicked.connect(self.add_employee.show)
+        self.add_employee_button.clicked.connect(self.restart_inactivity_timer)
 
         # Histogram
         self.histogram: Histogram = Histogram()
         self.histogram_button.clicked.connect(self.histogram.plot_histogram)
+        self.histogram_button.clicked.connect(self.restart_inactivity_timer)
 
         # Delete Employee
         self.delete_employee: DeleteEmployee = DeleteEmployee()
         self.delete_employee_button.clicked.connect(self.delete_employee.show)
+        self.delete_employee_button.clicked.connect(self.restart_inactivity_timer)
 
         # Add instruction
         self.instruction_add: InstructionAdd = InstructionAdd()
         self.add_instruction_button.clicked.connect(self.instruction_add.show)
+        self.add_instruction_button.clicked.connect(self.restart_inactivity_timer)
         self.instruction_add.signal.connect(self.reload_instruction)
 
         # Validate Instructions
@@ -138,10 +149,13 @@ class MainWindow(QMainWindow):
 
         self.user_history = list()
 
-        self.display_instructions()
-
+        self.inactivity_timer.stop()
         self.login_window.showFullScreen()
         self.hide()
+
+    def restart_inactivity_timer(self) -> None:
+        self.inactivity_timer.stop()
+        self.inactivity_timer.start(self.inactivity_timeout)
 
     def display_instructions(self) -> None:
         filtered_instructions: list[Instruction] = self.search_engine.filter_instructions(self.search_input.text(),
