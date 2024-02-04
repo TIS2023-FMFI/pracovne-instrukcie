@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QWidget
 import employees
 from csv import writer
 
-from constants import EMPLOYEES_PATH
+from constants import EMPLOYEES_PATH, show_warning
 
 
 class AddEmployee(QWidget):
@@ -21,11 +21,11 @@ class AddEmployee(QWidget):
     def button_add_clicked(self) -> None:
         form_names = [self.code.text().strip(), self.last_name.text().strip(), self.first_name.text().strip()]
         if any(form == '' for form in form_names):
-            employees.show_message(self, 'All fields must be filled in!')
+            show_warning(self, 'All fields must be filled in!')
 
         else:
             if employees.employee_exist(self.code.text().strip()):
-                employees.show_message(self, 'Employee with this code already exists')
+                show_warning(self, 'Employee with this code already exists')
 
             else:
                 self.close_window()
@@ -35,7 +35,7 @@ class AddEmployee(QWidget):
                     writer_object.writerow(form_names)
                     file.close()
 
-                employees.show_message(self, 'Employee has been added')
+                show_warning(self, 'Employee has been added')
 
     def close_window(self) -> None:
         self.code.setText('')

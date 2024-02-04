@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QWidget
 import csv
 import employees
 
-from constants import EMPLOYEES_PATH
+from constants import EMPLOYEES_PATH, show_warning
 
 
 class DeleteEmployee(QWidget):
@@ -20,7 +20,7 @@ class DeleteEmployee(QWidget):
 
     def delete_add_clicked(self) -> None:
         if self.code.text().strip() == '':
-            employees.show_message(self, 'All fields must be filled in!')
+            show_warning(self, 'All fields must be filled in!')
 
         else:
             code = self.code.text()
@@ -37,10 +37,10 @@ class DeleteEmployee(QWidget):
                     csv_writer = csv.writer(file)
                     csv_writer.writerows(rows)
 
-                employees.show_message(self, 'Employee has been removed')
+                show_warning(self, 'Employee has been removed')
 
             else:
-                employees.show_message(self, 'Employee with the given code does not exist')
+                show_warning(self, 'Employee with the given code does not exist')
 
     def close_window(self) -> None:
         self.code.setText('')
