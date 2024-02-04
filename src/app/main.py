@@ -63,9 +63,6 @@ class MainWindow(QMainWindow):
         # self.threadpool: QThreadPool = QThreadPool()
         # self.threadpool.start(send_email.email_sender)
 
-        # TODO Database remove?
-        self.database: DBManager = DBManager()
-
         # User
         self.username: str = ''
         self.is_admin: bool = False
