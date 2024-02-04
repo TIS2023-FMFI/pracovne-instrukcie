@@ -21,4 +21,7 @@ def initialize_instructions() -> list[Instruction]:
         if os.path.exists(instruction.file_path):
             out.append(instruction)
 
+        else:
+            database.execute_query(f"DELETE FROM instructions WHERE id = {instruction.id}")
+
     return out
