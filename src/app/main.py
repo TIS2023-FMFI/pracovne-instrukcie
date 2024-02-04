@@ -210,6 +210,6 @@ class MainWindow(QMainWindow):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    app.setStyleSheet(open('ui/login.css').read())
+    app.setStyleSheet(open('ui/main.css').read())
     w = MainWindow()
     app.exec()
