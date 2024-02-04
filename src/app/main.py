@@ -114,8 +114,19 @@ class MainWindow(QMainWindow):
         self.username = username
         self.is_admin = is_admin
         self.username_label.setText(username)
+        if self.is_admin:
+            self.add_employee_button.show()
+            self.histogram_button.show()
+            self.delete_employee_button.show()
+            self.add_instruction_button.show()
 
-        self.user_history = self.history.get_user_history(self.username)
+        else:
+            self.add_employee_button.hide()
+            self.histogram_button.hide()
+            self.delete_employee_button.hide()
+            self.add_instruction_button.hide()
+            self.user_history = self.history.get_user_history(self.username)
+
         self.display_instructions()
 
     def log_out_user(self) -> None:
@@ -127,6 +138,8 @@ class MainWindow(QMainWindow):
         self.histogram.hide()
         self.instruction_add.hide()
         self.instruction_delete.hide()
+
+        self.user_history = list()
 
         self.display_instructions()
 
@@ -144,32 +157,33 @@ class MainWindow(QMainWindow):
             item.setData(Qt.UserRole, instruction)
             item_widget = QWidget()
             item_widget.setObjectName('button_placeholder')
-
-            button = QPushButton('Validovať')
-            button.setStyleSheet("QPushButton{ background-color: green;}")
-            button.setProperty('Instruction', instruction)
-            button.clicked.connect(self.validate_instruction)
-
-            button2 = QPushButton("Vymazať")
-            button2.setStyleSheet("QPushButton{ background-color: red;}")
-            button2.setProperty('Instruction', instruction)
-            button2.clicked.connect(self.delete)
-
-            today = QDate.currentDate()
-            expiration = QDate.fromString(instruction.expiration_date, "yyyy-MM-dd")
-
-            validation = QLabel('Time left')
-            validation.setText(str(today.daysTo(expiration)) + ' D')
-
-            item_layout = QHBoxLayout()
-            item_layout.addStretch()
-            item_layout.addWidget(validation)
-            item_layout.addWidget(button)
-            item_layout.addWidget(button2)
-            item_widget.setLayout(item_layout)
-
             self.listWidget.addItem(item)
-            self.listWidget.setItemWidget(item, item_widget)
+
+            if self.is_admin:
+                button = QPushButton('Validovať')
+                button.setStyleSheet("QPushButton{ background-color: green;}")
+                button.setProperty('Instruction', instruction)
+                button.clicked.connect(self.validate_instruction)
+
+                button2 = QPushButton("Vymazať")
+                button2.setStyleSheet("QPushButton{ background-color: red;}")
+                button2.setProperty('Instruction', instruction)
+                button2.clicked.connect(self.delete)
+
+                today = QDate.currentDate()
+                expiration = QDate.fromString(instruction.expiration_date, "yyyy-MM-dd")
+
+                validation = QLabel('Time left')
+                validation.setText(str(today.daysTo(expiration)) + ' D')
+
+                item_layout = QHBoxLayout()
+                item_layout.addStretch()
+                item_layout.addWidget(validation)
+                item_layout.addWidget(button)
+                item_layout.addWidget(button2)
+                item_widget.setLayout(item_layout)
+
+                self.listWidget.setItemWidget(item, item_widget)
 
     def open_instruction(self, instruction: Instruction) -> None:
         path = INSTRUCTIONS_DIR + instruction.file_path
