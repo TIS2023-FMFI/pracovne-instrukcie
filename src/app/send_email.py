@@ -92,7 +92,7 @@ def create_body() -> str:
         for instruction in DBManager().execute_query(
             f"SELECT name, julianday(DATE(expiration_date)) - julianday(DATE('now')) "
             f"FROM instructions "
-            f"WHERE expiration_date BETWEEN date('now') AND date('now', '+31 days') "
+            f"WHERE expiration_date <= date('now', '+31 days') "
             f"ORDER BY expiration_date "
         )
     )
