@@ -63,6 +63,7 @@ class Histogram(QWidget):
         fig, ax = plt.subplots()
 
         ax.set_ylim(0, max(values) + 1)
+        ax.set_xticks(range(len(months)))
         ax.set_xticklabels(months, rotation=45, ha='right')
         ax.set_xlabel('Mesiac')
         ax.set_ylabel('Počet')
