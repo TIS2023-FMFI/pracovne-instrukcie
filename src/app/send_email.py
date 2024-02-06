@@ -3,6 +3,8 @@ import smtplib
 import time
 import logging
 import re
+from typing import Union
+
 from datetime import datetime, timedelta
 
 from email.mime.text import MIMEText
@@ -25,7 +27,7 @@ def email_sender() -> None:
         time.sleep(300)
 
 
-def extract_time_from_log(log_file_path: str = 'email_sender.log') -> str | None:
+def extract_time_from_log(log_file_path: str = 'email_sender.log') -> Union[str, None]:
     timestamp_pattern = r'\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}'
 
     with open(log_file_path, 'r') as log_file:
@@ -41,7 +43,7 @@ def extract_time_from_log(log_file_path: str = 'email_sender.log') -> str | None
         return None
 
 
-def is_more_than_seven_days_ago(log_timestamp_str: str | None) -> bool:
+def is_more_than_seven_days_ago(log_timestamp_str: Union[str, None]) -> bool:
     if log_timestamp_str is None:
         return True
 

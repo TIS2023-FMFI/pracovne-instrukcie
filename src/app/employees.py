@@ -1,6 +1,7 @@
 import csv
 import configparser
 
+from typing import Union
 from constants import EMPLOYEES_PATH
 
 
@@ -13,7 +14,7 @@ def verify_admin(code: str) -> bool:
     return False
 
 
-def get_username(code: str) -> str | None:
+def get_username(code: str) -> Union[str, None]:
     employees = read_file()
 
     if code in employees:
