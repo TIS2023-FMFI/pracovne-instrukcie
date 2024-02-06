@@ -12,9 +12,12 @@ QLabel{
     font-size: 12px;
 }
 QPushButton {
-    border: 0.5px solid black;
-    background-color: rgb(224, 219, 219);
-    color: black;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    background-color: #1d2546;
+    font-weight: bold;
 }
 QLabel#instruction_name{
     font-size:15px;

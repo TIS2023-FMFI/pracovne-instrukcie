@@ -172,12 +172,12 @@ class MainWindow(QMainWindow):
 
             if self.is_admin:
                 button = QPushButton('Validovať')
-                button.setStyleSheet("QPushButton{ background-color: green;}")
+                button.setStyleSheet("QPushButton{ background-color: #1d2546;}")
                 button.setProperty('Instruction', instruction)
                 button.clicked.connect(self.validate_instruction)
 
                 button2 = QPushButton("Vymazať")
-                button2.setStyleSheet("QPushButton{ background-color: red;}")
+                button2.setStyleSheet("QPushButton{ background-color: #a81a23;}")
                 button2.setProperty('Instruction', instruction)
                 button2.clicked.connect(self.delete)
 

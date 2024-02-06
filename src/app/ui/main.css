@@ -15,7 +15,7 @@ QRadioButton {
     border: none;
     border-radius: 10px;
     color: #fff;
-    background-color: #132643;
+    background-color: #1d2546;
     font-weight: bold;
 }
 
@@ -48,22 +48,22 @@ QSlider::groove:horizontal {
 QSlider::handle:horizontal {
     width: 16px;
     margin: -8px 0;
-    background: #3498db;
+    background: #3266b3;
     border: 1px solid #2980b9;
     border-radius: 8px;
 }
 
 /* Custom-styled scrollbar */
 QScrollBar:vertical {
-    width: 10px;
+    width: 20px;
     border: 1px solid #ccc;
     background: #f0f0f0;
 }
 
 QScrollBar::handle:vertical {
-    background: #3498db;
+    background: #3266b3;
     border: 1px solid #2980b9;
-    border-radius: 5px;
+    border-radius: 7px;
 }
 
 QScrollBar::add-line:vertical,
@@ -83,21 +83,21 @@ QLineEdit {
 
 /* Styles for QLabel (labels) */
 QLabel {
-    color: #333;
+    color: #1d2546;
     font-size: 36px;
     background-color: none;
 }
 
 /* Styles for QMessageBox (pop-up message box) */
 QMessageBox {
-    background-color: #fff;
+    background-color: #1d2546;
 }
 
 /* Styles for QMessageBox buttons */
 QMessageBox QPushButton {
     padding: 8px 16px;
     margin: 5px;
-    background-color: #3498db;
+    background-color: #3266b3;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -134,14 +134,6 @@ QListWidget::item:selected {
     background-color: #3266b3;
     text-decoration: none;
     outline: none;
-}
-
-QScrollBar:vertical {
-
-    background: #75c5ff;
-    border: none;
-    width: 15px;
-
 }
 
 
