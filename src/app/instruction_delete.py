@@ -14,7 +14,6 @@ class InstructionDelete(QWidget):
         QWidget.__init__(self)
         loadUi("ui/confirmation_window.ui", self)
         self.setWindowFlag(Qt.FramelessWindowHint)
-        self.setStyleSheet(open('ui/confirmation_window.css').read())
 
         self.database: DBManager = DBManager()
         self.file_path = None

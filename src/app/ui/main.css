@@ -7,13 +7,39 @@ QWidget {
     font-weight: bold;
 }
 
+QWidget#Form {
+    background-color: #9ec9e7;
+}
+
+QFrame {
+    background-color: transparent;
+}
+
+QPushButton#close_button {
+    border: none;
+    background-color: transparent;
+    padding: 10px 20px;
+}
+
+QPushButton#reject_button{
+    background-color: #a81a23;
+}
+
+QPushButton#reject_button:hover{
+    background-color: rgba(168, 26, 35, 0.7);
+}
+
+QPushButton#reject_button:pressed{
+    background-color: rgba(168, 26, 35, 0.5);
+}
+
 /* Styles for buttons */
 QPushButton,
 QToolButton,
 QRadioButton {
-    padding: 8px 16px;
+    padding: 10px 12px;
     border: none;
-    border-radius: 10px;
+    border-radius: 12px;
     color: #fff;
     background-color: #1d2546;
     font-weight: bold;
@@ -84,8 +110,21 @@ QLineEdit {
 /* Styles for QLabel (labels) */
 QLabel {
     color: #1d2546;
-    font-size: 36px;
+    font-size: 12px;
     background-color: none;
+}
+
+QLabel#heading,
+QLabel#username_label {
+    font-size: 36px;
+}
+
+QLabel#title {
+    font-size: 20px;
+}
+
+QLabel#instruction_name{
+    font-size:18px;
 }
 
 /* Styles for QMessageBox (pop-up message box) */
@@ -118,7 +157,7 @@ QListWidget {
 }
 
 QListWidget::item {
-    
+
     background-color: #608ed2;
     margin-top: 10px;
     margin-right: 5px;
@@ -126,7 +165,7 @@ QListWidget::item {
     height: 100px;
     border: 0.5px solid #323232;
     border-radius: 5px;
-    
+
 
 }
 
@@ -137,10 +176,115 @@ QListWidget::item:selected {
 }
 
 
-QWidget#button_placeholder{
+QWidget#button_placeholder {
     padding-left: 15px;
     padding-right: 15px;
     width: 50px;
     background-color: transparent;
 
+}
+
+QComboBox#frequency_combobox {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    background-color: #1d2546;
+    font-weight: bold;
+}
+
+QComboBox#frequency_combobox:drop-down {
+    border: 0px;
+    min-width: 25px;
+}
+
+QComboBox#frequency_combobox::down-arrow {
+    image: url("ui/down_arrow.svg");
+    width: 12px;
+    height: 12px;
+    margin-right: 5px;
+}
+
+QComboBox#frequency_combobox:on {
+    border: 4px solid #c2dbfe;
+}
+
+QComboBox#frequency_combobox QListView {
+    font-size: 12px;
+    border: 1px solid rgba(0, 0, 0, 10%);
+    padding: 5px;
+    background-color: #3266b3;
+    outline: 0px;
+    min-width: 40px;
+}
+
+QComboBox#frequency_combobox QListView:item {
+    width: 110px;
+  	left: 10px;
+  	color: white;
+  	font-size: 16px;
+  	background-color: #3266b3;
+}
+
+QComboBox#frequency_combobox QListView:item:hover {
+    background-color: #1e90ff;
+}
+
+QDateEdit {
+	padding: 10px 12px;
+    width: 90px;
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    background-color: #1d2546;
+    /*font-weight: bold;*/
+}
+
+QDateEdit::drop-down {
+	image: url("ui/down_arrow.svg");
+	width:12px;
+    border-style: solid;
+    border-width: 4px;
+    margin-right: 5px;
+}
+
+QCalendarWidget QToolButton {
+    width: 110px;
+    height: 20px;
+    color: white;
+    font-size: 14px;
+    background-color: #1d2546;
+}
+
+QCalendarWidget QMenu {
+  	width: 110px;
+  	left: 10px;
+  	color: white;
+  	font-size: 14px;
+  	background-color: #3266b3;
+}
+
+QCalendarWidget QSpinBox {
+  	width: 110px;
+  	font-size: 14px;
+  	color: white;
+  	background-color: #3266b3;
+}
+
+QCalendarWidget QWidget {
+	alternate-background-color: #3266b3;
+}
+
+QCalendarWidget QWidget#qt_calendar_navigationbar {
+  background-color: #1d2546;
+}
+
+QCalendarWidget QAbstractItemView:enabled {
+  	font-size:16px;
+  	color: white;
+  	background-color: #1d2546;
+}
+
+QCalendarWidget QAbstractItemView:disabled {
+color: rgb(128, 128, 128);
 }

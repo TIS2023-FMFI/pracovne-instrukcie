@@ -37,7 +37,6 @@ class Histogram(QWidget):
 
         self.save_button.clicked.connect(self.save_histogram)
         self.close_button.clicked.connect(self.close_histogram)
-        self.setStyleSheet(open('ui/histogram.css').read())
 
         self.database: DBManager = DBManager()
 

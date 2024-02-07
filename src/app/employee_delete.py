@@ -13,7 +13,6 @@ class DeleteEmployee(QWidget):
         QWidget.__init__(self)
         self.setWindowFlag(Qt.FramelessWindowHint)
         loadUi('ui/delete_employee.ui', self)
-        self.setStyleSheet(open('ui/add_employee.css').read())
 
         self.delete_button.clicked.connect(self.delete_add_clicked)
         self.close_button.clicked.connect(self.close_window)
