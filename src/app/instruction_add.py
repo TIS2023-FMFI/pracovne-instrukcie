@@ -12,7 +12,7 @@ from dateutil.relativedelta import relativedelta
 from instruction_delete import InstructionDelete
 from database_manager import DBManager
 
-from constants import INSTRUCTIONS_DIR, show_warning
+from constants import INSTRUCTIONS_DIR, show_notice
 
 
 class InstructionAdd(QWidget):
@@ -51,6 +51,7 @@ class InstructionAdd(QWidget):
         validation_date: QDate = self.validation_date.date()
         frequency: int = int(self.frequency_combobox.currentText())
         if path == '' or name == '':
+            show_notice(self, 'Všetky povinné polia musia byť vyplnené')
             return
 
         validation_date: str = validation_date.toString('yyyy-MM-dd')
@@ -59,7 +60,7 @@ class InstructionAdd(QWidget):
 
         if self.selectedFilePath:
             if os.path.exists(INSTRUCTIONS_DIR + path):
-                show_warning(self, 'Zadané meno súboru už existuje')
+                show_notice(self, 'Zadané meno súboru už existuje')
                 return
 
             try:
@@ -69,12 +70,15 @@ class InstructionAdd(QWidget):
                 print(f"Error copying file: {e}")
 
         else:
+            show_notice(self, 'Súbor nebol zvolený')
             return
 
         query = (f"INSERT INTO instructions (name, file_path, validation_date, expiration_date) "
                  f"VALUES ('{name}', '{INSTRUCTIONS_DIR + path}', '{validation_date}', '{expiration_date.date()}') ")
 
         self.database.execute_query(query)
+
+        show_notice(self, 'Inštrukcia bola pridaná')
 
         self.signal.emit()
         self.clear_form()

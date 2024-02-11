@@ -13,7 +13,7 @@ class Search:
         self.words_in_pdf: dict[str, set[str]] = dict()
         self.database: DBManager = DBManager()
         # TODO: read PDFs at startup
-        self.preread_pdfs()
+        #  self.preread_pdfs()
 
     def preread_pdfs(self) -> None:
         instructions_list = self.database.execute_query(f"SELECT file_path, name FROM instructions")

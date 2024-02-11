@@ -10,6 +10,7 @@ import datetime
 import calendar
 
 from database_manager import DBManager
+from constants import show_notice
 
 
 def sort_data(dates) -> tuple:
@@ -77,9 +78,9 @@ class Histogram(QWidget):
         self.show()
 
     def save_histogram(self) -> None:
-        # path = QFileDialog.getExistingDirectory(self, 'Select location', '../../resources/pdf')
         save_path, _ = QFileDialog.getSaveFileName(None, 'Save Figure', '', 'PNG files (*.png);;All Files (*)')
         if save_path:
             plt.savefig(save_path)
 
-        self.close_histogram()
+            show_notice(self, 'Histogram bol uložený')
+            self.close_histogram()

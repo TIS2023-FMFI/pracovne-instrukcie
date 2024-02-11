@@ -192,7 +192,7 @@
          </size>
         </property>
         <property name="placeholderText">
-         <string>Názov</string>
+         <string>Názov *</string>
         </property>
        </widget>
       </item>
@@ -229,7 +229,7 @@
          <item>
           <widget class="QPushButton" name="select_button">
            <property name="text">
-            <string>Vybrať súbor</string>
+            <string>Vybrať súbor *</string>
            </property>
           </widget>
          </item>

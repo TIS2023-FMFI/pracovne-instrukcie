@@ -11,7 +11,7 @@ from dateutil.relativedelta import relativedelta
 from database_manager import DBManager
 from PyQt5.QtCore import pyqtSignal
 
-from constants import INSTRUCTIONS_DIR
+from constants import INSTRUCTIONS_DIR, show_notice
 
 
 class InstructionValidate(QWidget):
@@ -78,4 +78,6 @@ class InstructionValidate(QWidget):
 
         print(self.database.execute_query(f"SELECT * FROM instructions WHERE id = {self.id}"))
         self.signal.emit()
+
+        show_notice(self, 'Inštrukcia bola validovaná')
         self.close_validation()

@@ -6,6 +6,8 @@ from PyQt5.QtCore import Qt, pyqtSignal
 
 from database_manager import DBManager
 
+from constants import show_notice
+
 
 class InstructionDelete(QWidget):
     signal: pyqtSignal = pyqtSignal()
@@ -35,7 +37,8 @@ class InstructionDelete(QWidget):
     def confirmation(self, instruction_id) -> None:
         self.hide()
         self.instruction_id = instruction_id
-        title, self.file_path = self.database.execute_query(f"SELECT name, file_path FROM instructions WHERE id = {instruction_id}")[0]
+        title, self.file_path = \
+        self.database.execute_query(f"SELECT name, file_path FROM instructions WHERE id = {instruction_id}")[0]
         self.set_title(title)
         self.show()
 
@@ -44,3 +47,4 @@ class InstructionDelete(QWidget):
         os.remove(self.file_path)
         self.instruction_id = 0
         self.signal.emit()
+        show_notice(self, 'Inštrukcia bola odstránená')
