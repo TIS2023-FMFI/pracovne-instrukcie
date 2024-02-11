@@ -5,8 +5,6 @@ from PyQt5.QtCore import Qt, QDate, QTimer
 from PyQt5.QtWidgets import QDialog, QApplication, QWidget, QMainWindow, QHBoxLayout, QLabel, QPushButton, \
     QListWidget, QListWidgetItem
 
-from constants import INSTRUCTIONS_DIR
-
 import employees
 from employee_add import AddEmployee
 from employee_delete import DeleteEmployee
@@ -81,6 +79,8 @@ class MainWindow(QMainWindow):
 
         # View Instructions
         self.pdf_viewer: InstructionViewer = InstructionViewer()
+        self.instructions_history.itemClicked.connect(lambda item: self.open_instruction(item.data(Qt.UserRole)))
+        self.instructions_history.itemClicked.connect(self.restart_inactivity_timer)
         self.instructions_list.itemClicked.connect(lambda item: self.open_instruction(item.data(Qt.UserRole)))
         self.instructions_list.itemClicked.connect(self.restart_inactivity_timer)
         self.display_instructions()
@@ -208,8 +208,7 @@ class MainWindow(QMainWindow):
                 instructions_list.setItemWidget(item, item_widget)
 
     def open_instruction(self, instruction: Instruction) -> None:
-        path = INSTRUCTIONS_DIR + instruction.file_path
-        self.pdf_viewer.set_document(path, instruction.name)
+        self.pdf_viewer.set_document(instruction.file_path, instruction.name)
         self.pdf_viewer.display()
         if not self.is_admin:
             self.history.log_open_instruction(self.user_code, instruction.id)
