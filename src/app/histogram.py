@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import QWidget
 
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
+import matplotlib.ticker as ticker
 
 import datetime
 import calendar
@@ -69,9 +70,16 @@ class Histogram(QWidget):
         ax.set_ylabel('Počet')
         ax.set_title('História validácii')
         ax.bar(months, values)
+        ax.yaxis.set_major_locator(ticker.MaxNLocator(integer=True))
+
+        ax.bar(months, values, color='#1d2546')
 
         for i, label in enumerate(ax.get_xticklabels()):
             label.set_color(colors[i])
+
+        for i, value in enumerate(values):
+            if value != 0:
+                ax.annotate(str(value), xy=(i, value), ha='center', va='bottom')
 
         canvas: FigureCanvasQTAgg = FigureCanvasQTAgg(fig)
         self.histogram.addWidget(canvas)
