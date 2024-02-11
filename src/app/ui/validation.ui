@@ -325,7 +325,7 @@
           <widget class="QPushButton" name="select_button">
            <property name="minimumSize">
             <size>
-             <width>75</width>
+             <width>120</width>
              <height>0</height>
             </size>
            </property>
@@ -424,7 +424,7 @@
            <property name="minimumSize">
             <size>
              <width>100</width>
-             <height>45</height>
+             <height>40</height>
             </size>
            </property>
            <property name="maximumSize">
