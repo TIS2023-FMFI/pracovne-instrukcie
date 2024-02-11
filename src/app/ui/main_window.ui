@@ -151,7 +151,24 @@
        </layout>
       </item>
       <item>
-       <widget class="QListWidget" name="listWidget"/>
+       <widget class="QLabel" name="history_label">
+        <property name="text">
+         <string>História</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QListWidget" name="instructions_history"/>
+      </item>
+      <item>
+       <widget class="QLabel" name="title">
+        <property name="text">
+         <string>Inštrukcie</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QListWidget" name="instructions_list"/>
       </item>
      </layout>
     </item>
