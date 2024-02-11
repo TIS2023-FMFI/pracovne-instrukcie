@@ -5,7 +5,7 @@ from PyQt5 import QtGui
 from PyQt5.uic import loadUi
 from PyQt5.QtCore import Qt, QDate, QThreadPool, QTimer
 from PyQt5.QtWidgets import QDialog, QApplication, QWidget, QMainWindow, QHBoxLayout, QLabel, QPushButton, \
-    QToolButton, QSpacerItem, QListWidgetItem, QMessageBox
+    QToolButton, QSpacerItem, QListWidget, QListWidgetItem, QMessageBox
 
 from constants import INSTRUCTIONS_DIR
 
@@ -86,8 +86,8 @@ class MainWindow(QMainWindow):
 
         # View Instructions
         self.pdf_viewer: InstructionViewer = InstructionViewer()
-        self.listWidget.itemClicked.connect(lambda item: self.open_instruction(item.data(Qt.UserRole)))
-        self.listWidget.itemClicked.connect(self.restart_inactivity_timer)
+        self.instructions_list.itemClicked.connect(lambda item: self.open_instruction(item.data(Qt.UserRole)))
+        self.instructions_list.itemClicked.connect(self.restart_inactivity_timer)
         self.display_instructions()
 
         # Add new Employee
@@ -161,17 +161,30 @@ class MainWindow(QMainWindow):
         self.inactivity_timer.start(self.inactivity_timeout)
 
     def display_instructions(self) -> None:
-        filtered_instructions: list[Instruction] = self.search_engine.filter_instructions(self.search_input.text(),
-                                                                                          tuple(self.user_history),
-                                                                                          self.instructions_DB)
+        history, instructions = self.search_engine.filter_instructions(self.search_input.text(),
+                                                                       tuple(self.user_history),
+                                                                       self.instructions_DB)
 
-        self.listWidget.clear()
-        for instruction in filtered_instructions:
+        if len(history) == 0:
+            self.history_label.hide()
+
+        else:
+            self.history_label.show()
+
+        self.instructions_history.clear()
+        self.fill_instructions(self.instructions_history, history)
+        self.instructions_history.setMaximumHeight(75 * len(history))
+
+        self.instructions_list.clear()
+        self.fill_instructions(self.instructions_list, instructions)
+
+    def fill_instructions(self, instructions_list: QListWidget, instructions: list[Instruction]) -> None:
+        for instruction in instructions:
             item = QListWidgetItem(instruction.name)
             item.setData(Qt.UserRole, instruction)
             item_widget = QWidget()
             item_widget.setObjectName('button_placeholder')
-            self.listWidget.addItem(item)
+            instructions_list.addItem(item)
 
             if self.is_admin:
                 button = QPushButton('Validovať')
@@ -197,7 +210,7 @@ class MainWindow(QMainWindow):
                 item_layout.addWidget(reject_button)
                 item_widget.setLayout(item_layout)
 
-                self.listWidget.setItemWidget(item, item_widget)
+                instructions_list.setItemWidget(item, item_widget)
 
     def open_instruction(self, instruction: Instruction) -> None:
         path = INSTRUCTIONS_DIR + instruction.file_path

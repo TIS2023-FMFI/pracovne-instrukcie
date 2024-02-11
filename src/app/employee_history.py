@@ -19,5 +19,6 @@ class History:
             int(instruction[0])
             for instruction in self.database.execute_query(f"SELECT instruction_id FROM history "
                                                            f"WHERE user_code = '{user_code}' "
-                                                           f"ORDER BY id DESC ")
+                                                           f"ORDER BY id DESC "
+                                                           f"LIMIT 5 ")
         ]

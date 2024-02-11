@@ -12,8 +12,7 @@ class Search:
     def __init__(self) -> None:
         self.words_in_pdf: dict[str, set[str]] = dict()
         self.database: DBManager = DBManager()
-        # TODO: read PDFs at startup
-        #  self.preread_pdfs()
+        self.preread_pdfs()
 
     def preread_pdfs(self) -> None:
         instructions_list = self.database.execute_query(f"SELECT file_path, name FROM instructions")
@@ -55,19 +54,19 @@ class Search:
 
         return False
 
-    def filter_instructions(self, keyword: str, history: tuple[int], all_instructions: list[Instruction]) -> list[
-        Instruction]:
+    def filter_instructions(self, keyword: str, history: tuple[int], all_instructions: list[Instruction]) -> tuple[
+        list[Instruction], list[Instruction]]:
         instructions: list[Instruction] = list()
         for instruction in all_instructions:
             if self.contains_keyword(instruction, unidecode(keyword.lower())):
                 instructions.append(instruction)
 
         instruction_ids: dict[int, Instruction] = {instr.id: instr for instr in instructions}
-        output: list[Instruction] = list()
+        history_instructions: list[Instruction] = list()
         for instruction in history:
             if instruction in instruction_ids.keys():
-                output.append(instruction_ids[instruction])
+                history_instructions.append(instruction_ids[instruction])
                 instructions.remove(instruction_ids[instruction])
                 del instruction_ids[instruction]
 
-        return output + instructions
+        return history_instructions, instructions
