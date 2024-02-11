@@ -3,4 +3,4 @@
 resources/pdf/*
 !resources/pdf/README.md
 resources/employees.csv
-src/app/config.ini
+src/config.ini

@@ -23,8 +23,3 @@ class DBManager:
 
         conn.commit()
         conn.close()
-
-
-if __name__ == '__main__':
-    db = DBManager()
-    db.run_script('initialize_database.sql')

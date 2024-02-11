@@ -64,7 +64,7 @@
          <string/>
         </property>
         <property name="pixmap">
-         <pixmap>../../../resources/ceva_logo.png</pixmap>
+         <pixmap>ceva_logo.png</pixmap>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>

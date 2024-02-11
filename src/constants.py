@@ -1,8 +1,8 @@
 from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel
 from PyQt5.QtCore import Qt, QTimer
 
-INSTRUCTIONS_DIR = '../../resources/pdf/'
-EMPLOYEES_PATH = '../../resources/employees.csv'
+INSTRUCTIONS_DIR = '../resources/pdf/'
+EMPLOYEES_PATH = '../resources/employees.csv'
 
 
 def show_notice(self, message: str) -> None:

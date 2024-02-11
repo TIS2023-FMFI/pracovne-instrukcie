@@ -1,17 +1,12 @@
 import sys
-import os
 
-from PyQt5 import QtGui
 from PyQt5.uic import loadUi
-from PyQt5.QtCore import Qt, QDate, QThreadPool, QTimer
+from PyQt5.QtCore import Qt, QDate, QTimer
 from PyQt5.QtWidgets import QDialog, QApplication, QWidget, QMainWindow, QHBoxLayout, QLabel, QPushButton, \
-    QToolButton, QSpacerItem, QListWidget, QListWidgetItem, QMessageBox
+    QListWidget, QListWidgetItem
 
 from constants import INSTRUCTIONS_DIR
 
-from database_manager import DBManager
-
-import send_email
 import employees
 from employee_add import AddEmployee
 from employee_delete import DeleteEmployee
