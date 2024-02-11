@@ -22,6 +22,6 @@ def initialize_instructions() -> list[Instruction]:
             out.append(instruction)
 
         else:
-            database.execute_query(f"DELETE FROM instructions WHERE id = {instruction.id}")
+            database.execute_query(f"DELETE FROM instructions WHERE id = '{instruction.id}'")
 
     return out

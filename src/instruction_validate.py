@@ -72,11 +72,11 @@ class InstructionValidate(QWidget):
                 print('error')
                 return
 
-        update_query += f"validation_date=CURRENT_DATE, expiration_date='{expiration_date}' WHERE id={self.id}"
+        update_query += f"validation_date=CURRENT_DATE, expiration_date='{expiration_date}' WHERE id='{self.id}'"
         self.database.execute_query(update_query)
         self.database.execute_query(f"INSERT INTO validations (instruction_id) VALUES ('{self.id}')")
 
-        print(self.database.execute_query(f"SELECT * FROM instructions WHERE id = {self.id}"))
+        print(self.database.execute_query(f"SELECT * FROM instructions WHERE id = '{self.id}'"))
         self.signal.emit()
 
         show_notice(self, 'Inštrukcia bola validovaná')
