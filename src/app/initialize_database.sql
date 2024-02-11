@@ -116,6 +116,6 @@ CREATE TABLE IF NOT EXISTS validations
 CREATE TABLE IF NOT EXISTS history
 (
     id             INTEGER PRIMARY KEY AUTOINCREMENT,
-    username       VARCHAR,
+    user_code       VARCHAR,
     instruction_id INTEGER
 );

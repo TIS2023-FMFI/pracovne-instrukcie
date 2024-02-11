@@ -45,7 +45,7 @@ class LoginWindow(QDialog):
 
         if username is not None:
             self.login_input.setText('')
-            self.main_window.log_in_user(username, isAdmin)
+            self.main_window.log_in_user(username, password_input, isAdmin)
 
             self.main_window.showFullScreen()
             self.hide()
@@ -65,6 +65,7 @@ class MainWindow(QMainWindow):
 
         # User
         self.username: str = ''
+        self.user_code: str = ''
         self.is_admin: bool = False
         self.history: History = History()
         self.user_history: list[int] = []
@@ -118,8 +119,9 @@ class MainWindow(QMainWindow):
         self.instruction_delete: InstructionDelete = InstructionDelete()
         self.instruction_delete.signal.connect(self.reload_instruction)
 
-    def log_in_user(self, username: str, is_admin: bool) -> None:
+    def log_in_user(self, username: str, user_code: str, is_admin: bool) -> None:
         self.username = username
+        self.user_code = user_code
         self.is_admin = is_admin
         self.username_label.setText(username)
         if self.is_admin:
@@ -133,7 +135,7 @@ class MainWindow(QMainWindow):
             self.histogram_button.hide()
             self.delete_employee_button.hide()
             self.add_instruction_button.hide()
-            self.user_history = self.history.get_user_history(self.username)
+            self.user_history = self.history.get_user_history(self.user_code)
 
         self.display_instructions()
 
@@ -202,7 +204,7 @@ class MainWindow(QMainWindow):
         self.pdf_viewer.set_document(path, instruction.name)
         self.pdf_viewer.display()
         if not self.is_admin:
-            self.history.log_open_instruction(self.username, instruction.id)
+            self.history.log_open_instruction(self.user_code, instruction.id)
 
     def validate_instruction(self):
         self.instruction_validate.hide()
