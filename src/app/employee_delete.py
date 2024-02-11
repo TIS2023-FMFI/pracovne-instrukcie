@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import QWidget
 import csv
 import employees
 
+from database_manager import DBManager
 from constants import EMPLOYEES_PATH, show_notice
 
 
@@ -33,6 +34,8 @@ class DeleteEmployee(QWidget):
                 with open(EMPLOYEES_PATH, 'w', newline='', encoding='utf-8') as file:
                     csv_writer = csv.writer(file)
                     csv_writer.writerows(rows)
+
+                DBManager().execute_query(f"DELETE FROM history WHERE user_code = '{code}'")
 
                 show_notice(self, 'Zamestnanec bol odstránený')
                 self.close_window()
