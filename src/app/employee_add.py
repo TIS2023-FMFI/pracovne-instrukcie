@@ -20,11 +20,11 @@ class AddEmployee(QWidget):
     def button_add_clicked(self) -> None:
         form_names = [self.code.text().strip(), self.last_name.text().strip(), self.first_name.text().strip()]
         if any(form == '' for form in form_names):
-            show_warning(self, 'All fields must be filled in!')
+            show_warning(self, 'Všetky povinné polia musia byť vyplnené')
 
         else:
             if employees.employee_exist(self.code.text().strip()):
-                show_warning(self, 'Employee with this code already exists')
+                show_warning(self, 'Zamestnanec so zadaným kódom už existuje')
 
             else:
                 self.close_window()
@@ -34,7 +34,7 @@ class AddEmployee(QWidget):
                     writer_object.writerow(form_names)
                     file.close()
 
-                show_warning(self, 'Employee has been added')
+                show_warning(self, 'Zamestnanec bol pridaný')
 
     def close_window(self) -> None:
         self.code.setText('')

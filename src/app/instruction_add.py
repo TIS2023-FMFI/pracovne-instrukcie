@@ -59,7 +59,7 @@ class InstructionAdd(QWidget):
 
         if self.selectedFilePath:
             if os.path.exists(INSTRUCTIONS_DIR + path):
-                show_warning(self, 'File with this path already exists!')
+                show_warning(self, 'Zadané meno súboru už existuje')
                 return
 
             try:

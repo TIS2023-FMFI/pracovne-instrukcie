@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>100</width>
-    <height>100</height>
+    <width>212</width>
+    <height>108</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <item>
       <widget class="QLabel" name="title">
        <property name="text">
-        <string>Delete employee</string>
+        <string>Vymazať zamestnanca</string>
        </property>
       </widget>
      </item>
@@ -54,14 +54,14 @@
      <item>
       <widget class="QLineEdit" name="code">
        <property name="placeholderText">
-        <string>Code *</string>
+        <string>Kód zamestnanca *</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="delete_button">
        <property name="text">
-        <string>Delete employee</string>
+        <string>Vymazať</string>
        </property>
       </widget>
      </item>

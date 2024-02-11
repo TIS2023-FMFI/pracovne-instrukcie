@@ -19,7 +19,7 @@ class DeleteEmployee(QWidget):
 
     def delete_add_clicked(self) -> None:
         if self.code.text().strip() == '':
-            show_warning(self, 'All fields must be filled in!')
+            show_warning(self, 'Všetky povinné polia musia byť vyplnené')
 
         else:
             code = self.code.text()
@@ -36,10 +36,10 @@ class DeleteEmployee(QWidget):
                     csv_writer = csv.writer(file)
                     csv_writer.writerows(rows)
 
-                show_warning(self, 'Employee has been removed')
+                show_warning(self, 'Zamestnanec bol odstránený')
 
             else:
-                show_warning(self, 'Employee with the given code does not exist')
+                show_warning(self, 'Zamestnanec so zadaným kódom neexistuje')
 
     def close_window(self) -> None:
         self.code.setText('')

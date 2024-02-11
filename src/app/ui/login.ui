@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>804</width>
-    <height>666</height>
+    <width>322</width>
+    <height>347</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -76,7 +76,7 @@
       <string notr="true"/>
      </property>
      <property name="text">
-      <string>Login</string>
+      <string>Prihlásenie</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -95,7 +95,7 @@
       <string notr="true"/>
      </property>
      <property name="text">
-      <string>Login</string>
+      <string>Prihlásiť sa</string>
      </property>
     </widget>
    </item>
@@ -120,7 +120,7 @@
       <string notr="true"/>
      </property>
      <property name="placeholderText">
-      <string>Password</string>
+      <string>Heslo</string>
      </property>
     </widget>
    </item>

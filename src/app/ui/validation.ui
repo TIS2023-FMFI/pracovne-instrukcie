@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>100</width>
-    <height>100</height>
+    <width>558</width>
+    <height>229</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -230,7 +230,7 @@
             </font>
            </property>
            <property name="text">
-            <string>TextLabel</string>
+            <string>Názov inštrukcie</string>
            </property>
           </widget>
          </item>
@@ -341,7 +341,7 @@
             </font>
            </property>
            <property name="text">
-            <string>Select</string>
+            <string>Vybrať súbor</string>
            </property>
           </widget>
          </item>

@@ -184,7 +184,7 @@ class MainWindow(QMainWindow):
                 expiration = QDate.fromString(instruction.expiration_date, "yyyy-MM-dd")
 
                 validation = QLabel('Time left')
-                validation.setText(str(today.daysTo(expiration)) + ' D')
+                validation.setText(f'Platnosť: {str(today.daysTo(expiration))} dní')
                 validation.setObjectName("instruction_name")
 
                 item_layout = QHBoxLayout()

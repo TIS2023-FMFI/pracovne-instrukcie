@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>250</height>
+    <width>188</width>
+    <height>170</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <item>
       <widget class="QLabel" name="title">
        <property name="text">
-        <string>Add new employee</string>
+        <string>Nový zamestnanec</string>
        </property>
       </widget>
      </item>
@@ -54,14 +54,14 @@
      <item>
       <widget class="QLineEdit" name="code">
        <property name="placeholderText">
-        <string>Code *</string>
+        <string>Kód zamestnanca *</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QLineEdit" name="first_name">
        <property name="placeholderText">
-        <string>First name *</string>
+        <string>Meno *</string>
        </property>
       </widget>
      </item>
@@ -71,14 +71,14 @@
         <string/>
        </property>
        <property name="placeholderText">
-        <string>Last name *</string>
+        <string>Priezvisko *</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="add_button">
        <property name="text">
-        <string>Add employee</string>
+        <string>Pridať</string>
        </property>
       </widget>
      </item>
