@@ -21,15 +21,15 @@ QPushButton#close_button {
     padding: 10px 20px;
 }
 
-QPushButton#reject_button{
+QPushButton#reject_button {
     background-color: #a81a23;
 }
 
-QPushButton#reject_button:hover{
+QPushButton#reject_button:hover {
     background-color: rgba(168, 26, 35, 0.7);
 }
 
-QPushButton#reject_button:pressed{
+QPushButton#reject_button:pressed {
     background-color: rgba(168, 26, 35, 0.5);
 }
 
@@ -123,8 +123,8 @@ QLabel#title {
     font-size: 20px;
 }
 
-QLabel#instruction_name{
-    font-size:18px;
+QLabel#instruction_name {
+    font-size: 18px;
 }
 
 /* Styles for QMessageBox (pop-up message box) */
@@ -220,10 +220,10 @@ QComboBox#frequency_combobox QListView {
 
 QComboBox#frequency_combobox QListView:item {
     width: 110px;
-  	left: 10px;
-  	color: white;
-  	font-size: 16px;
-  	background-color: #3266b3;
+    left: 10px;
+    color: white;
+    font-size: 16px;
+    background-color: #3266b3;
 }
 
 QComboBox#frequency_combobox QListView:item:hover {
@@ -231,7 +231,7 @@ QComboBox#frequency_combobox QListView:item:hover {
 }
 
 QDateEdit {
-	padding: 10px 12px;
+    padding: 10px 12px;
     width: 90px;
     border: none;
     border-radius: 10px;
@@ -241,50 +241,50 @@ QDateEdit {
 }
 
 QDateEdit::drop-down {
-	image: url("ui/down_arrow.svg");
-	width:12px;
+    image: url("ui/down_arrow.svg");
+    width: 12px;
     border-style: solid;
     border-width: 4px;
     margin-right: 5px;
 }
 
+/* QCalendarWidget */
+QCalendarWidget QWidget {
+    alternate-background-color: #3266b3;
+}
+
 QCalendarWidget QToolButton {
-    width: 110px;
-    height: 20px;
+    height: 25px;
     color: white;
-    font-size: 14px;
+    font-size: 16px;
     background-color: #1d2546;
 }
 
 QCalendarWidget QMenu {
-  	width: 110px;
-  	left: 10px;
-  	color: white;
-  	font-size: 14px;
-  	background-color: #3266b3;
+    width: 120px;
+    left: 10px;
+    color: white;
+    font-size: 16px;
+    background-color: #3266b3;
 }
 
 QCalendarWidget QSpinBox {
-  	width: 110px;
-  	font-size: 14px;
-  	color: white;
-  	background-color: #3266b3;
-}
-
-QCalendarWidget QWidget {
-	alternate-background-color: #3266b3;
+    width: 50px;
+    background-color: transparent;
+    color: white;
+    font-size: 16px;
 }
 
 QCalendarWidget QWidget#qt_calendar_navigationbar {
-  background-color: #1d2546;
+    background-color: #1d2546;
 }
 
 QCalendarWidget QAbstractItemView:enabled {
-  	font-size:16px;
-  	color: white;
-  	background-color: #1d2546;
+    font-size: 18px;
+    color: #ffffff;
+    background-color: #1d2546;
 }
 
 QCalendarWidget QAbstractItemView:disabled {
-color: rgb(128, 128, 128);
+    color: rgb(128, 128, 128);
 }
