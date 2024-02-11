@@ -3,7 +3,7 @@ import sys
 import shutil
 
 from PyQt5.uic import loadUi
-from PyQt5.QtCore import Qt, QDate, pyqtSignal
+from PyQt5.QtCore import Qt, QDate, pyqtSignal, QLocale
 from PyQt5.QtWidgets import QWidget, QFileDialog
 
 import datetime
@@ -28,6 +28,8 @@ class InstructionAdd(QWidget):
 
         self.select_button.clicked.connect(self.select_file)
         self.validation_date.setDate(QDate.currentDate())
+        self.validation_date.setLocale(QLocale(QLocale.Slovak))
+
         self.add_button.clicked.connect(self.add_instruction)
         self.frequency_combobox.addItems([str(i) for i in range(1, 13)])
 
