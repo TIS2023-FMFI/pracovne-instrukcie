@@ -62,8 +62,8 @@ class InstructionValidate(QWidget):
             update_query += f"file_path='{INSTRUCTIONS_DIR + new_instruction}', "
             if self.selectedFilePath:
                 try:
-                    shutil.copy2(self.selectedFilePath, INSTRUCTIONS_DIR)
                     os.remove(self.file_path)
+                    shutil.copy2(self.selectedFilePath, INSTRUCTIONS_DIR)
 
                 except Exception as e:
                     print(f"Error copying/removing file: {e}")
