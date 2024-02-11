@@ -23,7 +23,7 @@ class InstructionAdd(QWidget):
         loadUi('ui/add_instruction.ui', self)
         self.setWindowFlag(Qt.FramelessWindowHint)
 
-        self.close_button.clicked.connect(self.close)
+        self.close_button.clicked.connect(self.close_window)
         self.database: DBManager = DBManager()
 
         self.select_button.clicked.connect(self.select_file)
