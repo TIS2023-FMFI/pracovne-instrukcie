@@ -139,17 +139,18 @@ class MainWindow(QMainWindow):
 
     def log_out_user(self) -> None:
         self.username_label.setText('')
+        self.inactivity_timer.stop()
         self.search_input.setText('')
-
-        self.pdf_viewer.hide()
-        self.instruction_validate.hide()
-        self.histogram.hide()
-        self.instruction_add.hide()
-        self.instruction_delete.hide()
+        self.pdf_viewer.close()
+        self.add_employee.close_window()
+        self.histogram.close_histogram()
+        self.delete_employee.close_window()
+        self.instruction_add.close_window()
+        self.instruction_validate.close_window()
+        self.instruction_delete.close()
 
         self.user_history = list()
 
-        self.inactivity_timer.stop()
         self.login_window.showFullScreen()
         self.hide()
 

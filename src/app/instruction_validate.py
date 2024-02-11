@@ -22,7 +22,7 @@ class InstructionValidate(QWidget):
         loadUi("ui/validation.ui", self)
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
 
-        self.close_button.clicked.connect(self.close_validation)
+        self.close_button.clicked.connect(self.close_window)
         self.select_button.clicked.connect(self.select_file)
         self.validate_button.clicked.connect(self.validate)
 
@@ -46,7 +46,7 @@ class InstructionValidate(QWidget):
         self.id: int = _id
         self.instruction_name.setText(name)
 
-    def close_validation(self):
+    def close_window(self):
         self.path_label.setText('')
         self.close()
 
@@ -80,4 +80,4 @@ class InstructionValidate(QWidget):
         self.signal.emit()
 
         show_notice(self, 'Inštrukcia bola validovaná')
-        self.close_validation()
+        self.close_window()
