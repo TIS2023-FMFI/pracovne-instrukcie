@@ -19,10 +19,9 @@ class InstructionViewer(QWidget):
     def __init__(self, pdf_path=None, name=None) -> None:
         QWidget.__init__(self)
         loadUi('ui/pdf.ui', self)
-        self.setStyleSheet(open('ui/pdf.css').read())
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
 
-        self.pushButton.clicked.connect(lambda: self.hide())
+        self.close_button.clicked.connect(lambda: self.hide())
         self.screen_width, self.screen_height = get_screen_resolution()
         self.w: int = 1100
         self.h: int = self.screen_height - 70
@@ -35,7 +34,7 @@ class InstructionViewer(QWidget):
         self.path = path
         self.name = name
         self.pdf_document = fitz.open(self.path)
-        self.label.setText(self.name)
+        self.title.setText(self.name)
 
     def resize_page(self, page: fitz.Page) -> fitz.Pixmap:
         w, h = page.rect.br

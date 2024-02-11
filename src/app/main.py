@@ -172,26 +172,26 @@ class MainWindow(QMainWindow):
 
             if self.is_admin:
                 button = QPushButton('Validovať')
-                button.setStyleSheet("QPushButton{ background-color: green;}")
                 button.setProperty('Instruction', instruction)
                 button.clicked.connect(self.validate_instruction)
 
-                button2 = QPushButton("Vymazať")
-                button2.setStyleSheet("QPushButton{ background-color: red;}")
-                button2.setProperty('Instruction', instruction)
-                button2.clicked.connect(self.delete)
+                reject_button = QPushButton("Vymazať")
+                reject_button.setObjectName("reject_button")
+                reject_button.setProperty('Instruction', instruction)
+                reject_button.clicked.connect(self.delete)
 
                 today = QDate.currentDate()
                 expiration = QDate.fromString(instruction.expiration_date, "yyyy-MM-dd")
 
                 validation = QLabel('Time left')
                 validation.setText(str(today.daysTo(expiration)) + ' D')
+                validation.setObjectName("instruction_name")
 
                 item_layout = QHBoxLayout()
                 item_layout.addStretch()
                 item_layout.addWidget(validation)
                 item_layout.addWidget(button)
-                item_layout.addWidget(button2)
+                item_layout.addWidget(reject_button)
                 item_widget.setLayout(item_layout)
 
                 self.listWidget.setItemWidget(item, item_widget)

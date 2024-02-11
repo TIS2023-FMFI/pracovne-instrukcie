@@ -13,7 +13,6 @@ class AddEmployee(QWidget):
         QWidget.__init__(self)
         self.setWindowFlag(Qt.FramelessWindowHint)
         loadUi('ui/add_employee.ui', self)
-        self.setStyleSheet(open('ui/add_employee.css').read())
 
         self.add_button.clicked.connect(self.button_add_clicked)
         self.close_button.clicked.connect(self.close_window)

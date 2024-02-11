@@ -20,7 +20,6 @@ class InstructionValidate(QWidget):
     def __init__(self) -> None:
         QWidget.__init__(self)
         loadUi("ui/validation.ui", self)
-        self.setStyleSheet(open('ui/validation.css').read())
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
 
         self.close_button.clicked.connect(self.close_validation)

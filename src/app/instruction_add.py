@@ -21,7 +21,6 @@ class InstructionAdd(QWidget):
     def __init__(self) -> None:
         QWidget.__init__(self)
         loadUi('ui/add_instruction.ui', self)
-        self.setStyleSheet(open('ui/instruction_manager.css').read())
         self.setWindowFlag(Qt.FramelessWindowHint)
 
         self.close_button.clicked.connect(self.close)
