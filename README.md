@@ -1,6 +1,6 @@
 # Pracovne-instrukcie
 Projekt o prezeraní pracovných inštrukcií\
-Aplikácia je robená v `Python 3.10`
+Aplikácia je v `Python 3.10`
 
 ## Project setup
 Nainštalovať všetky potrebné knižnice (cez terminál): 
@@ -10,7 +10,7 @@ pip install -r requirements.txt
 
 V súbore `src/config.ini`:
 1. nastaviť `recipient_email = ...` na email, kam sa majú posielať notifikácie ohľadom blížiaceho sa konca platnosti pracovných inštrukcií.
-2. V sekcii `[Preferences]` si treba nastaviť správne rozlíšenie obrazovky
+2. v sekcii `[Preferences]` si treba nastaviť správne rozlíšenie obrazovky
 
 ### Inštrukcie a ich pracovné listy
 
