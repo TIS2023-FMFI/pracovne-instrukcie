@@ -78,9 +78,8 @@ class InstructionAdd(QWidget):
 
         self.database.execute_query(query)
 
-        show_notice(self, 'Inštrukcia bola pridaná')
-
         self.signal.emit()
+        show_notice(self, 'Inštrukcia bola pridaná')
         self.clear_form()
         self.close()
 
