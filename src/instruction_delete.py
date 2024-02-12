@@ -38,14 +38,25 @@ class InstructionDelete(QWidget):
         self.hide()
         self.instruction_id = instruction_id
         title, self.file_path = \
-        self.database.execute_query(f"SELECT name, file_path FROM instructions WHERE id = '{instruction_id}'")[0]
+            self.database.execute_query(f"SELECT name, file_path FROM instructions WHERE id = '{instruction_id}'")[0]
         self.set_title(title)
         self.show()
 
     def delete_instruction(self) -> None:
         self.database.execute_query(f"DELETE FROM instructions WHERE id = '{self.instruction_id}'")
         self.database.execute_query(f"DELETE FROM history WHERE instruction_id = '{self.instruction_id}'")
-        os.remove(self.file_path)
+
+        if os.path.exists(self.file_path):
+            try:
+                os.remove(self.file_path)
+                print("File removed successfully")
+            except PermissionError:
+                print("Permission denied to delete the file")
+            except Exception as e:
+                print("An error occurred:", e)
+        else:
+            print("File does not exist")
+
         self.instruction_id = 0
         self.signal.emit()
         show_notice(self, 'Inštrukcia bola odstránená')

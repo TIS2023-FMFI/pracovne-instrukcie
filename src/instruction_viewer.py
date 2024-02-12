@@ -21,14 +21,21 @@ class InstructionViewer(QWidget):
         loadUi('ui/pdf.ui', self)
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
 
-        self.close_button.clicked.connect(lambda: self.hide())
+        self.close_button.clicked.connect(lambda: self.close_window())
         self.screen_width, self.screen_height = get_screen_resolution()
         self.w: int = 1100
         self.h: int = self.screen_height - 70
         self.path: str = pdf_path
         self.name: str = name
-        self.pdf_document = fitz.open(self.path)
+        self.pdf_document = None
         self.setGeometry((self.screen_width - self.w) // 2, 35, self.w, self.h)
+
+    def close_window(self):
+        if self.pdf_document:
+            self.pdf_document.close()
+            self.pdf_document = None
+
+        self.close()
 
     def set_document(self, path: str, name: str) -> None:
         self.path = path

@@ -141,7 +141,7 @@ class MainWindow(QMainWindow):
         self.username_label.setText('')
         self.inactivity_timer.stop()
         self.search_input.setText('')
-        self.pdf_viewer.close()
+        self.pdf_viewer.close_window()
         self.add_employee.close_window()
         self.histogram.close_histogram()
         self.delete_employee.close_window()
