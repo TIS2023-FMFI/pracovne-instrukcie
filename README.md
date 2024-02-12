@@ -11,6 +11,7 @@ pip install -r requirements.txt
 V súbore `src/config.ini`:
 1. nastaviť `recipient_email = ...` na email, kam sa majú posielať notifikácie ohľadom blížiaceho sa konca platnosti pracovných inštrukcií.
 2. v sekcii `[Preferences]` si treba nastaviť správne rozlíšenie obrazovky
+3. v sekcii `[Admin]` zmeniť heslo, na požadované heslo admina (rozlišné od zamestnaneckých kódov)
 
 ### Inštrukcie a ich pracovné listy
 
