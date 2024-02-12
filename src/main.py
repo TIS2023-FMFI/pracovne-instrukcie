@@ -1,9 +1,11 @@
 import sys
 
 from PyQt5.uic import loadUi
-from PyQt5.QtCore import Qt, QDate, QTimer
+from PyQt5.QtCore import Qt, QDate, QTimer, QThreadPool
 from PyQt5.QtWidgets import QDialog, QApplication, QWidget, QMainWindow, QHBoxLayout, QLabel, QPushButton, \
     QListWidget, QListWidgetItem
+
+import send_email
 
 import employees
 from employee_add import AddEmployee
@@ -52,9 +54,9 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__()
         loadUi('ui/main_window.ui', self)
 
-        # # Email Sender
-        # self.threadpool: QThreadPool = QThreadPool()
-        # self.threadpool.start(send_email.email_sender)
+        # Email Sender
+        self.threadpool: QThreadPool = QThreadPool()
+        self.threadpool.start(send_email.email_sender)
 
         # User
         self.username: str = ''
@@ -81,8 +83,10 @@ class MainWindow(QMainWindow):
         self.pdf_viewer: InstructionViewer = InstructionViewer()
         self.instructions_history.itemClicked.connect(lambda item: self.open_instruction(item.data(Qt.UserRole)))
         self.instructions_history.itemClicked.connect(self.restart_inactivity_timer)
+        self.instructions_history.itemClicked.connect(self.display_instructions)
         self.instructions_list.itemClicked.connect(lambda item: self.open_instruction(item.data(Qt.UserRole)))
         self.instructions_list.itemClicked.connect(self.restart_inactivity_timer)
+        self.instructions_list.itemClicked.connect(self.display_instructions)
         self.display_instructions()
 
         # Add new Employee
@@ -130,7 +134,6 @@ class MainWindow(QMainWindow):
             self.histogram_button.hide()
             self.delete_employee_button.hide()
             self.add_instruction_button.hide()
-            self.user_history = self.history.get_user_history(self.user_code)
 
         self.display_instructions()
 
@@ -156,6 +159,9 @@ class MainWindow(QMainWindow):
         self.inactivity_timer.start(self.inactivity_timeout)
 
     def display_instructions(self) -> None:
+        if not self.is_admin:
+            self.user_history = self.history.get_user_history(self.user_code)
+
         history, instructions = self.search_engine.filter_instructions(self.search_input.text(),
                                                                        tuple(self.user_history),
                                                                        self.instructions_DB)
