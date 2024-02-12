@@ -20,9 +20,9 @@ def email_sender() -> None:
     while True:
         if is_more_than_seven_days_ago(extract_time_from_log()):
             body: str = create_body()
-            logging.info('Email was sent!')
             if body:
-                print(str(datetime.now()) + ' - ' + 'Email was sent!' if send_email(body) else 'No email :(')
+                if send_email(body):
+                    logging.info('Email was sent!')
 
         time.sleep(300)
 
@@ -90,7 +90,7 @@ def send_email(body: str) -> bool:
 
 def create_body() -> str:
     return '\n'.join(
-        f'{instruction[1]:2.0f} days  ---  {instruction[0]}'
+        f'{instruction[1]:2.0f} dní  ---  {instruction[0]}'
         for instruction in DBManager().execute_query(
             f"SELECT name, julianday(DATE(expiration_date)) - julianday(DATE('now')) "
             f"FROM instructions "
