@@ -83,7 +83,12 @@ def send_email(body: str) -> bool:
         server.login(sender_email, sender_password)
 
         # Send the email
-        server.sendmail(sender_email, recipient_email, message.as_string())
+        try:
+            server.sendmail(sender_email, recipient_email, message.as_string())
+
+        except smtplib.SMTPRecipientsRefused:
+            print('recipient_email is not valid')
+            return False
 
     return True
 
