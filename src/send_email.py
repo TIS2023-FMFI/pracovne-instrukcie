@@ -74,21 +74,26 @@ def send_email(body: str) -> bool:
     message['Subject'] = subject
     message.attach(MIMEText(body, 'plain', 'utf-8'))
 
-    # Connect to the SMTP server
-    with smtplib.SMTP(host_server, host_port) as server:
-        # Start TLS for security
-        server.starttls()
+    try:
+        # Connect to the SMTP server
+        with smtplib.SMTP(host_server, host_port) as server:
+            # Start TLS for security
+            server.starttls()
 
-        # Login to the email account
-        server.login(sender_email, sender_password)
+            # Login to the email account
+            server.login(sender_email, sender_password)
 
-        # Send the email
-        try:
-            server.sendmail(sender_email, recipient_email, message.as_string())
+            # Send the email
+            try:
+                server.sendmail(sender_email, recipient_email, message.as_string())
 
-        except smtplib.SMTPRecipientsRefused:
-            print('recipient_email is not valid')
-            return False
+            except smtplib.SMTPRecipientsRefused:
+                print('recipient_email is not valid')
+                return False
+
+    except:
+        print("could not establish connection to SMTP server")
+        return False
 
     return True
 
