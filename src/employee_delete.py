@@ -7,6 +7,7 @@ import employees
 
 from database_manager import DBManager
 from constants import EMPLOYEES_PATH, show_notice
+from virtual_keyboard import VirtualKeyboard
 
 
 class DeleteEmployee(QWidget):
@@ -17,6 +18,16 @@ class DeleteEmployee(QWidget):
 
         self.delete_button.clicked.connect(self.delete_add_clicked)
         self.close_button.clicked.connect(self.close_window)
+
+        self.virtual_keyboard = VirtualKeyboard(self.code)
+        self.code.focusInEvent = self.show_virtual_keyboard
+
+    def show_virtual_keyboard(self, event):
+        if self.virtual_keyboard.isVisible():
+            self.virtual_keyboard.hide()
+
+        else:
+            self.virtual_keyboard.show()
 
     def delete_add_clicked(self) -> None:
         if self.code.text().strip() == '':

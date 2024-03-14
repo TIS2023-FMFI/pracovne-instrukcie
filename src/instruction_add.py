@@ -13,6 +13,7 @@ from instruction_delete import InstructionDelete
 from database_manager import DBManager
 
 from constants import INSTRUCTIONS_DIR, show_notice
+from virtual_keyboard import VirtualKeyboard
 
 
 class InstructionAdd(QWidget):
@@ -35,6 +36,16 @@ class InstructionAdd(QWidget):
 
         self.instruction_id: int = 0
         self.selectedFilePath: str = ''
+
+        self.virtual_keyboard = VirtualKeyboard(self.instruction_name)
+        self.instruction_name.focusInEvent = self.show_virtual_keyboard
+
+    def show_virtual_keyboard(self, event):
+        if self.virtual_keyboard.isVisible():
+            self.virtual_keyboard.hide()
+
+        else:
+            self.virtual_keyboard.show()
 
     def select_file(self) -> None:
         path, _ = QFileDialog.getOpenFileName(self, 'Select file', INSTRUCTIONS_DIR, 'PDF files (*.pdf)')

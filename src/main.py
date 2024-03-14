@@ -20,17 +20,30 @@ from histogram import Histogram
 from instruction_add import InstructionAdd
 from instruction_delete import InstructionDelete
 
+from virtual_keyboard import VirtualKeyboard
 
-class LoginWindow(QDialog):
+
+class LoginWindow(QWidget):
     def __init__(self, main_window) -> None:
         self.main_window = main_window
 
         super(LoginWindow, self).__init__()
         loadUi('ui/login.ui', self)
 
+        self.virtual_keyboard = VirtualKeyboard(self.login_input)
+
+        self.login_input.focusInEvent = self.show_virtual_keyboard
         self.login_button.clicked.connect(self.log_in)
 
+    def show_virtual_keyboard(self, event):
+        if self.virtual_keyboard.isVisible():
+            self.virtual_keyboard.hide()
+
+        else:
+            self.virtual_keyboard.show()
+
     def log_in(self) -> None:
+        self.virtual_keyboard.hide()
         password_input: str = str(self.login_input.text())
         username: str = employees.get_username(password_input)
         isAdmin: bool = employees.verify_admin(password_input)
@@ -79,6 +92,10 @@ class MainWindow(QMainWindow):
         self.search_input.textChanged.connect(self.display_instructions)
         self.search_input.textChanged.connect(self.restart_inactivity_timer)
 
+        # Virtual Keyboard
+        self.virtual_keyboard = VirtualKeyboard(self.search_input)
+        self.search_input.focusInEvent = self.show_virtual_keyboard
+
         # View Instructions
         self.pdf_viewer: InstructionViewer = InstructionViewer()
         self.instructions_history.itemClicked.connect(lambda item: self.open_instruction(item.data(Qt.UserRole)))
@@ -117,6 +134,13 @@ class MainWindow(QMainWindow):
         # Delete Instruction
         self.instruction_delete: InstructionDelete = InstructionDelete()
         self.instruction_delete.signal.connect(self.reload_instruction)
+
+    def show_virtual_keyboard(self, event):
+        if self.virtual_keyboard.isVisible():
+            self.virtual_keyboard.hide()
+
+        else:
+            self.virtual_keyboard.show()
 
     def log_in_user(self, username: str, user_code: str, is_admin: bool) -> None:
         self.username = username
