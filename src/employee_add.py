@@ -19,18 +19,14 @@ class AddEmployee(QWidget):
         self.close_button.clicked.connect(self.close_window)
 
         self.virtual_keyboard = VirtualKeyboard(self.code)
-        self.code.focusInEvent = lambda e: self.show_virtual_keyboard(e, self.code)
-        self.first_name.focusInEvent = lambda e: self.show_virtual_keyboard(e, self.first_name)
-        self.last_name.focusInEvent = lambda e: self.show_virtual_keyboard(e, self.last_name)
+        self.code.mousePressEvent = lambda e: self.show_virtual_keyboard(e, self.code)
+        self.first_name.mousePressEvent = lambda e: self.show_virtual_keyboard(e, self.first_name)
+        self.last_name.mousePressEvent = lambda e: self.show_virtual_keyboard(e, self.last_name)
 
     def show_virtual_keyboard(self, event, line_edit):
         self.virtual_keyboard.set_input_line(line_edit)
-        # self.virtual_keyboard.show()
-        if self.virtual_keyboard.isVisible():
-            self.virtual_keyboard.hide()
-
-        else:
-            self.virtual_keyboard.show()
+        self.virtual_keyboard.hide()
+        self.virtual_keyboard.show()
 
     def button_add_clicked(self) -> None:
         self.virtual_keyboard.hide()

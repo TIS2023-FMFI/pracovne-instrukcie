@@ -38,14 +38,11 @@ class InstructionAdd(QWidget):
         self.selectedFilePath: str = ''
 
         self.virtual_keyboard = VirtualKeyboard(self.instruction_name)
-        self.instruction_name.focusInEvent = self.show_virtual_keyboard
+        self.instruction_name.mousePressEvent = self.show_virtual_keyboard
 
     def show_virtual_keyboard(self, event):
-        if self.virtual_keyboard.isVisible():
-            self.virtual_keyboard.hide()
-
-        else:
-            self.virtual_keyboard.show()
+        self.virtual_keyboard.hide()
+        self.virtual_keyboard.show()
 
     def select_file(self) -> None:
         path, _ = QFileDialog.getOpenFileName(self, 'Select file', INSTRUCTIONS_DIR, 'PDF files (*.pdf)')

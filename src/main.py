@@ -32,15 +32,12 @@ class LoginWindow(QWidget):
 
         self.virtual_keyboard = VirtualKeyboard(self.login_input)
 
-        self.login_input.focusInEvent = self.show_virtual_keyboard
+        self.login_input.mousePressEvent = self.show_virtual_keyboard
         self.login_button.clicked.connect(self.log_in)
 
     def show_virtual_keyboard(self, event):
-        if self.virtual_keyboard.isVisible():
-            self.virtual_keyboard.hide()
-
-        else:
-            self.virtual_keyboard.show()
+        self.virtual_keyboard.hide()
+        self.virtual_keyboard.show()
 
     def log_in(self) -> None:
         self.virtual_keyboard.hide()
@@ -94,7 +91,7 @@ class MainWindow(QMainWindow):
 
         # Virtual Keyboard
         self.virtual_keyboard = VirtualKeyboard(self.search_input)
-        self.search_input.focusInEvent = self.show_virtual_keyboard
+        self.search_input.mousePressEvent = self.show_virtual_keyboard
 
         # View Instructions
         self.pdf_viewer: InstructionViewer = InstructionViewer()
@@ -172,6 +169,7 @@ class MainWindow(QMainWindow):
         self.instruction_add.close_window()
         self.instruction_validate.close_window()
         self.instruction_delete.close()
+        self.virtual_keyboard.close()
 
         self.user_history = list()
 
