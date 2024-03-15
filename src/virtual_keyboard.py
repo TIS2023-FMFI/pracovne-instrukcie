@@ -4,8 +4,10 @@ import configparser
 from PyQt5.QtCore import Qt, QEvent, QPoint
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLineEdit, QHBoxLayout, QDesktopWidget
 
-BACKSPACE = '<-'
-SPACE = '-'
+BACKSPACE = '⌫'
+SPACE = ' '
+SHIFT = '⇧'
+ENTER = '⏎'
 
 
 def get_screen_resolution() -> tuple[int, int]:
@@ -27,12 +29,16 @@ class VirtualKeyboard(QWidget):
 
         self.input = input_line
 
+        self.oldPos = None
+        self.shift = False
+        self.buttons = []
+
         # Create buttons for the keyboard
         self.keyboard_layout = [
             ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', BACKSPACE],
             ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
             ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
-            ['z', 'x', 'c', 'v', 'b', 'n', 'm'],
+            [SHIFT, 'z', 'x', 'c', 'v', 'b', 'n', 'm', ENTER],
             [SPACE]
         ]
 
@@ -41,19 +47,31 @@ class VirtualKeyboard(QWidget):
             for key in row:
                 button = QPushButton(key)
                 button.clicked.connect(self.on_button_clicked)
+                if key == ENTER:
+                    button.setStyleSheet("font-size: 20px;")
+
                 row_layout.addWidget(button)
+                self.buttons.append(button)
 
             self.layout.addLayout(row_layout)
 
         width, height = get_screen_resolution()
         self.move(width // 2 - 150, height - self.height())
 
+    def mousePressEvent(self, event):
+        self.oldPos = event.globalPos()
+
+    def mouseMoveEvent(self, event):
+        delta = event.globalPos() - self.oldPos
+        self.move(self.x() + delta.x(), self.y() + delta.y())
+        self.oldPos = event.globalPos()
+
     def set_input_line(self, input_line):
         self.input = input_line
 
     def eventFilter(self, obj, event):
-        if event.type() == QEvent.FocusOut:
-            self.hide()
+        if event.type() == QEvent.WindowDeactivate:
+            self.close()
             return True
 
         return super().eventFilter(obj, event)
@@ -62,11 +80,37 @@ class VirtualKeyboard(QWidget):
         button = self.sender()
         if button:
             char = button.text()
-            if char == BACKSPACE:
-                self.input.setText(self.input.text()[:-1])
+            if char == SHIFT:
+                if not self.shift:
+                    self.enable_shift()
 
-            elif char == SPACE:
-                self.input.setText(self.input.text() + ' ')
+                else:
+                    self.disable_shift()
 
             else:
-                self.input.setText(self.input.text() + char)
+                if self.shift:
+                    self.disable_shift()
+
+                if char == ENTER:
+                    self.close()
+
+                elif char == BACKSPACE:
+                    self.input.setText(self.input.text()[:-1])
+
+                elif char == SPACE:
+                    self.input.setText(self.input.text() + ' ')
+
+                else:
+                    self.input.setText(self.input.text() + char)
+
+    def enable_shift(self):
+        self.shift = True
+
+        for button in self.buttons:
+            button.setText(button.text().upper())
+
+    def disable_shift(self):
+        self.shift = False
+
+        for button in self.buttons:
+            button.setText(button.text().lower())
